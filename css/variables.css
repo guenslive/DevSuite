@@ -1,0 +1,58 @@
+/* --- UNIVERSAL RESET --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* --- VARIABLES & THEME --- */
+:root {
+  --bg-color: #f2f2f7;
+  --card-bg: #ffffff;
+  --text-primary: #1c1c1e;
+  --text-secondary: #8e8e93;
+  --input-bg: #f2f2f7;
+  --input-focus-bg: #ffffff;
+  --border-color: #e5e5ea;
+  --apple-blue: #007aff;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --code-bg: #1c1c1e;
+  --code-text: #7bd7ff;
+  --toggle-bg: rgba(0, 0, 0, 0.05);
+  --toggle-icon: #1c1c1e;
+  --preview-border: #e5e5ea;
+  --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --track-color: #d1d1d6;
+  --thumb-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --pass-color: #34c759;
+  --fail-color: #ff3b30;
+  --checker-pattern: repeating-conic-gradient(
+      rgba(0, 0, 0, 0.04) 0% 25%,
+      transparent 0% 50%
+    )
+    50% / 16px 16px;
+}
+
+[data-theme="dark"] {
+  --bg-color: #000000;
+  --card-bg: #1c1c1e;
+  --text-primary: #ffffff;
+  --text-secondary: #98989d;
+  --input-bg: #2c2c2e;
+  --input-focus-bg: #3a3a3c;
+  --border-color: #3a3a3c;
+  --apple-blue: #0a84ff;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  --code-bg: #000000;
+  --code-text: #7bd7ff;
+  --toggle-bg: rgba(255, 255, 255, 0.1);
+  --toggle-icon: #ffcc00;
+  --preview-border: #3a3a3c;
+  --track-color: #636366;
+  --thumb-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --checker-pattern: repeating-conic-gradient(
+      rgba(255, 255, 255, 0.06) 0% 25%,
+      transparent 0% 50%
+    )
+    50% / 16px 16px;
+}

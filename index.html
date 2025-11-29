@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>DevTools Suite Ultimate V31 (Fixed)</title>
+    
+    <script>
+      (function() {
+        const s = localStorage.getItem("theme") || 
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", s);
+      })();
+    </script>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/tools.css">
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="header-row">
+        <div class="tabs-container">
+          <button class="tab-btn active" onclick="switchTab('clamp')">Clamp</button>
+          <button class="tab-btn" onclick="switchTab('ratio')">Ratio</button>
+          <button class="tab-btn" onclick="switchTab('placeholder')">Image</button>
+          <button class="tab-btn" onclick="switchTab('shadow')">Shadow</button>
+          <button class="tab-btn" onclick="switchTab('contrast')">Contrast</button>
+          <button class="tab-btn" onclick="switchTab('gradient')">Gradient</button>
+          <button class="tab-btn" onclick="switchTab('converter')">Converter</button>
+          <button class="tab-btn" onclick="switchTab('blob')">Shape</button>
+          <button class="tab-btn" onclick="switchTab('filter')">Filters</button>
+          <button class="tab-btn" onclick="switchTab('flex')">Flexbox</button>
+          <button class="tab-btn" onclick="switchTab('grid')">Grid</button>
+        </div>
+        <button class="theme-toggle-btn" onclick="toggleTheme()">
+          <svg id="sunIcon" style="display: none" viewBox="0 0 24 24">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
+          </svg>
+          <svg id="moonIcon" viewBox="0 0 24 24">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
+          </svg>
+        </button>
+      </div>
+
+      <div id="section-clamp" class="tool-section active">
+        <h2>Clamp Generator</h2>
+        
+        <div class="preview-container" style="flex-direction: column; align-items: stretch; gap: 10px; padding: 20px; background: var(--bg-secondary); margin-bottom: 20px;">
+            <div id="clampPreviewBox" style="border: 2px dashed var(--border-color); padding: 20px; transition: all 0.2s; margin: 0 auto; background: var(--bg-primary); border-radius: 8px; overflow: hidden; width: 100%; display: flex; justify-content: center; align-items: center; min-height: 100px;">
+                <p id="clampPreviewText" style="margin: 0; white-space: nowrap; text-align: center;">Texto de Prueba</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                <span style="font-size: 0.8rem; color: var(--text-secondary);">Viewport Simulado:</span>
+                <input type="range" id="clampViewportSlider" min="320" max="1920" value="1000" style="flex: 1;" oninput="App.clamp.updateViewport()">
+                <span id="clampViewportVal" style="font-size: 0.8rem; font-weight: bold; min-width: 50px; text-align: right;">1000px</span>
+            </div>
+        </div>
+
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Ancho Min (PX)</label>
+            <input type="number" id="minWidth" value="375" oninput="calcClamp()" />
+          </div>
+          <div class="input-group">
+            <label>Ancho Max (PX)</label>
+            <input type="number" id="maxWidth" value="1440" oninput="calcClamp()" />
+          </div>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <div class="label-row">
+              <label>Font Min</label>
+              <select id="minUnit" style="border: none; color: var(--apple-blue); background: transparent; font-weight: 700;" onchange="handleUnitChange('minFont', this)">
+                <option value="px">px</option>
+                <option value="rem" selected>rem</option>
+              </select>
+            </div>
+            <input type="number" id="minFont" value="1" step="any" oninput="calcClamp()" />
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label>Font Max</label>
+              <select id="maxUnit" style="border: none; color: var(--apple-blue); background: transparent; font-weight: 700;" onchange="handleUnitChange('maxFont', this)">
+                <option value="px">px</option>
+                <option value="rem" selected>rem</option>
+              </select>
+            </div>
+            <input type="number" id="maxFont" value="2" step="any" oninput="calcClamp()" />
+          </div>
+        </div>
+        <div style="text-align: right; margin-bottom: 10px">
+          <label style="margin-right: 5px">Base PX:</label>
+          <input type="number" id="pixelsPerRem" value="16" style="width: 60px; padding: 6px; text-align: center; border-radius: 8px;" oninput="calcClamp()" />
+        </div>
+        <div class="output-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS RESULT</span>
+            <button class="copy-btn" onclick="copyText('clampResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="clampResult"></div>
+        </div>
+      </div>
+
+      <div id="section-ratio" class="tool-section">
+        <h2>Aspect Ratio</h2>
+        
+        <div class="blob-type-group" style="margin-bottom: 20px;">
+            <button class="blob-type-btn active" id="ratioTabCalc" onclick="App.ratio.switchMode('calc')">1. Calcular Ratio</button>
+            <button class="blob-type-btn" id="ratioTabResize" onclick="App.ratio.switchMode('resize')">2. Calcular Pixeles</button>
+        </div>
+
+        <!-- View 1: Calculate Ratio -->
+        <div id="ratioViewCalc">
+            <div class="preview-container">
+            <div class="ratio-box" id="ratioBox">16:9</div>
+            </div>
+            <div class="grid-pair">
+            <div class="input-group">
+                <label>Ancho (px)</label>
+                <input type="number" id="imgWidth" value="1920" oninput="calcRatio()" />
+            </div>
+            <div class="input-group">
+                <label>Alto (px)</label>
+                <input type="number" id="imgHeight" value="1080" oninput="calcRatio()" />
+            </div>
+            </div>
+            <div style="text-align: center; margin-bottom: 20px; font-weight: 600; font-size: 1.2rem;" id="ratioResultText">
+            16 : 9
+            </div>
+            <div class="output-box">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS</span>
+                <button class="copy-btn" onclick="copyText('ratioCssResult', this)">Copiar</button>
+            </div>
+            <div class="code-result" id="ratioCssResult">aspect-ratio: 16 / 9;</div>
+            </div>
+        </div>
+
+        <!-- View 2: Inverse Calculator -->
+        <div id="ratioViewResize" style="display: none;">
+            <div class="preview-container" style="margin-top: 20px;">
+                <div class="ratio-box" id="resizePreviewBox" style="width: 160px; height: 90px;">16:9</div>
+            </div>
+            
+            <div class="grid-pair" style="align-items: center; gap: 10px;">
+                <div class="input-group">
+                    <label>Ratio Ancho</label>
+                    <input type="number" id="ratioInW" value="16" oninput="App.ratio.calcResize('ratio')" />
+                </div>
+                
+                <div class="input-group">
+                    <label>Ratio Alto</label>
+                    <input type="number" id="ratioInH" value="9" oninput="App.ratio.calcResize('ratio')" />
+                </div>
+            </div>
+
+            <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin: 20px 0 10px;">
+                Escribe en UNO de los dos campos abajo:
+            </p>
+
+            <div class="grid-pair">
+                <div class="input-group">
+                    <label>Si el Ancho es...</label>
+                    <input type="number" id="resizeW" placeholder="Escribe aquí..." oninput="App.ratio.calcResize('width')" />
+                </div>
+                <div class="input-group">
+                    <label>La Altura debe ser...</label>
+                    <input type="number" id="resizeH" placeholder="Escribe aquí..." oninput="App.ratio.calcResize('height')" />
+                </div>
+            </div>
+
+        </div>
+      </div>
+
+      <div id="section-placeholder" class="tool-section">
+        <h2>Placeholder Gen</h2>
+        <div class="preview-container">
+          <canvas id="placeholderCanvas"></canvas>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Ancho</label>
+            <input type="number" id="phWidth" value="600" oninput="updatePlaceholder(true)" />
+          </div>
+          <div class="input-group">
+            <label>Alto</label>
+            <input type="number" id="phHeight" value="400" oninput="updatePlaceholder(true)" />
+          </div>
+        </div>
+        <div class="grid-triple">
+          <div class="input-group">
+            <label>Texto</label>
+            <input type="text" id="phText" placeholder="Auto" oninput="updatePlaceholder(true)" />
+          </div>
+          <div class="input-group">
+            <label>Size</label>
+            <input type="number" id="phFontSize" value="40" oninput="updatePlaceholder(true)" />
+          </div>
+          <div class="input-group">
+            <label>Weight</label>
+            <select id="phFontWeight" onchange="updatePlaceholder(true)">
+              <option value="normal">Normal</option>
+              <option value="bold" selected>Bold</option>
+              <option value="900">Black</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <div class="label-row" style="justify-content: space-between; margin-bottom: 5px;">
+                <label style="margin:0">Fondo</label>
+                <button class="btn-small" style="padding: 4px 8px; font-size: 0.7rem;" onclick="App.placeholder.randomColor()">Random</button>
+            </div>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="phBgBox" style="background: #007aff">
+                <input type="color" id="phBgColor" value="#007aff" oninput="syncProPicker('phBg', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="phBgText" value="#007AFF" oninput="syncProPicker('phBg', this.value)" />
+              </div>
+            </div>
+            <div class="palette-row" id="phBgPalette"></div>
+          </div>
+          <div class="input-group">
+            <label>Texto</label>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="phTxtBox" style="background: #ffffff">
+                <input type="color" id="phTextColor" value="#ffffff" oninput="syncProPicker('phTxt', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="phTxtText" value="#FFFFFF" oninput="syncProPicker('phTxt', this.value)" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="output-box" style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="code-result" style="color: #8e8e93">Descargar</span>
+          <button class="action-btn" onclick="downloadPlaceholder()">Guardar .PNG</button>
+        </div>
+      </div>
+
+      <div id="section-shadow" class="tool-section">
+        <h2>Surface Generator</h2>
+        <div class="blob-type-group" style="margin-bottom: 20px">
+          <button class="blob-type-btn active" id="modeSmooth" onclick="App.shadow.setMode('smooth')">Smooth</button>
+          <button class="blob-type-btn" id="modeNeu" onclick="App.shadow.setMode('neu')">Neumorphism</button>
+          <button class="blob-type-btn" id="modeGlass" onclick="App.shadow.setMode('glass')">Glass</button>
+          <button class="blob-type-btn" id="modeMultiple" onclick="App.shadow.setMode('multiple')">Multiple</button>
+        </div>
+        
+        <div id="shadowLayersControl" style="display: none; margin-bottom: 20px;">
+          <div class="label-row" style="margin-bottom: 10px; align-items: center;">
+            <label style="margin:0">Capas de Sombra</label>
+            <button class="btn-small" style="padding: 6px 12px; font-size: 0.7rem;" onclick="App.shadow.addLayer()">+ Añadir Capa</button>
+          </div>
+          <div id="shadowLayersList" class="stops-list"></div>
+        </div>
+
+        <div class="preview-container" id="shadowPreviewContainer" style="perspective: 1000px; transition: background 0.3s">
+          <div id="shadowPreviewBox" style="transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-secondary);"></div>
+        </div>
+        
+        <div class="grid-pair">
+          <div class="input-group">
+            <div class="label-row">
+              <label id="lblCtrl1">Elevación</label><span id="valCtrl1" style="font-size: 0.75rem">50</span>
+            </div>
+            <input type="range" id="shCtrl1" min="0" max="100" value="50" oninput="App.shadow.update()" />
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label id="lblCtrl2">Offset X</label><span id="valCtrl2" style="font-size: 0.75rem">0</span>
+            </div>
+            <input type="range" id="shCtrl2" min="-100" max="100" value="0" oninput="App.shadow.update()" />
+          </div>
+        </div>
+
+        <div class="grid-pair">
+          <div class="input-group">
+            <div class="label-row">
+              <label id="lblCtrl3">Intensidad</label><span id="valCtrl3" style="font-size: 0.75rem">0.2</span>
+            </div>
+            <input type="range" id="shCtrl3" min="0" max="100" value="20" oninput="App.shadow.update()" />
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label id="lblCtrl4">Difusión (Blur)</label><span id="valCtrl4" style="font-size: 0.75rem">1.0x</span>
+            </div>
+            <input type="range" id="shCtrl4" min="0" max="200" value="100" oninput="App.shadow.update()" />
+          </div>
+        </div>
+
+        <div class="grid-triple">
+          <div class="input-group">
+            <label id="lblColorShadow">Color Sombra</label>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="shColBox" style="background: #000000">
+                <input type="color" id="shColColor" value="#000000" oninput="syncProPicker('shCol', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="shColText" value="#000000" oninput="syncProPicker('shCol', this.value)" />
+              </div>
+            </div>
+          </div>
+          <div class="input-group">
+            <label id="lblColorObject">Color Objeto</label>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="shObjBox" style="background: #ffffff">
+                <input type="color" id="shObjColor" value="#ffffff" oninput="syncProPicker('shObj', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="shObjText" value="#FFFFFF" oninput="syncProPicker('shObj', this.value)" />
+              </div>
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Fondo Base</label>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="shBgBox" style="background: #f2f2f7">
+                <input type="color" id="shBgColor" value="#f2f2f7" oninput="syncProPicker('shBg', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="shBgText" value="#F2F2F7" oninput="syncProPicker('shBg', this.value)" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group" id="shInsetGroup" style="margin-top: 10px">
+          <label>Opciones</label>
+          <div class="checkbox-group" style="height: 50px">
+            <label for="shInset" style="margin: 0; cursor: pointer; color: var(--text-primary); font-weight: 600; text-transform: none; font-size: 0.9rem;">Inset (Interior)</label>
+            <input type="checkbox" id="shInset" onchange="App.shadow.update()" />
+          </div>
+        </div>
+
+        <div id="shNeuControls" style="display: none; margin-top: 10px;">
+            <div class="input-group">
+                <label>Forma (Shape)</label>
+                <div class="blob-type-group" style="margin-bottom: 0">
+                    <button class="blob-type-btn active" id="neuFlat" onclick="App.shadow.setNeuShape('flat')">Plano</button>
+                    <button class="blob-type-btn" id="neuConcave" onclick="App.shadow.setNeuShape('concave')">Cóncavo</button>
+                    <button class="blob-type-btn" id="neuConvex" onclick="App.shadow.setNeuShape('convex')">Convexo</button>
+                    <button class="blob-type-btn" id="neuPressed" onclick="App.shadow.setNeuShape('pressed')">Hundido</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="shGlassControls" style="display: none; margin-top: 10px;">
+            <div class="grid-pair">
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Ruido (Noise)</label><span id="valGlassNoise" style="font-size: 0.75rem">0%</span>
+                    </div>
+                    <input type="range" id="glassNoise" min="0" max="20" value="0" oninput="App.shadow.update()" />
+                </div>
+                <div class="input-group">
+                    <label>Borde Brillante</label>
+                    <div class="checkbox-group" style="height: 50px; margin-top: 10px;">
+                        <label for="glassShine" style="margin: 0; cursor: pointer; color: var(--text-primary); font-weight: 600; text-transform: none; font-size: 0.9rem;">Activar Brillo</label>
+                        <input type="checkbox" id="glassShine" onchange="App.shadow.update()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO</span>
+            <button class="copy-btn" onclick="copyText('shadowResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="shadowResult"></div>
+        </div>
+      </div>
+
+      <div id="section-contrast" class="tool-section">
+        <h2>Contrast Checker</h2>
+        <div class="contrast-preview" id="contrastPreviewBox" style="background-color: #ffffff; color: #000000">
+          <div class="contrast-score" id="contrastScore">21.00</div>
+          <div class="contrast-status" id="contrastRating">Excellent</div>
+          <div style="margin-top: 15px; font-size: 1.5rem; font-weight: 700">Texto Grande</div>
+          <div style="font-size: 1rem">Texto Normal - El rápido zorro...</div>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Texto (FG)</label>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="fgBox" style="background: #000000">
+                <input type="color" id="fgColor" value="#000000" oninput="syncProPicker('fg', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="fgText" value="#000000" oninput="syncProPicker('fg', this.value)" />
+              </div>
+            </div>
+            <div class="palette-row" id="fgPalette"></div>
+          </div>
+          <div class="input-group">
+            <label>Fondo (BG)</label>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="bgBox" style="background: #ffffff">
+                <input type="color" id="bgColor" value="#ffffff" oninput="syncProPicker('bg', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="bgText" value="#FFFFFF" oninput="syncProPicker('bg', this.value)" />
+              </div>
+            </div>
+            <div class="palette-row" id="bgPalette"></div>
+          </div>
+        </div>
+        <div class="results-grid">
+          <div class="result-card">
+            <div class="res-title">AA Normal</div>
+            <div id="badgeAA" class="res-badge pass">PASS</div>
+          </div>
+          <div class="result-card">
+            <div class="res-title">AA Large</div>
+            <div id="badgeAALg" class="res-badge pass">PASS</div>
+          </div>
+          <div class="result-card">
+            <div class="res-title">AAA Normal</div>
+            <div id="badgeAAA" class="res-badge pass">PASS</div>
+          </div>
+          <div class="result-card">
+            <div class="res-title">AAA Large</div>
+            <div id="badgeAAALg" class="res-badge pass">PASS</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="section-gradient" class="tool-section">
+        <h2>Interactive Gradient</h2>
+        <div class="grad-bar-wrapper">
+          <div class="grad-bar-visual" id="gradBarVisual">
+            <div class="grad-bar-overlay" id="gradBarOverlay"></div>
+          </div>
+        </div>
+        <div class="preview-container"><div id="gradientPreviewBox"></div></div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Tipo</label>
+            <select id="gradType" onchange="updateGradient()">
+              <option value="linear" selected>Lineal</option>
+              <option value="radial">Radial</option>
+            </select>
+          </div>
+          <div class="input-group" id="gradAngleGroup">
+            <div class="label-row">
+              <label>Ángulo</label><span id="valGradAngle" style="font-size: 0.75rem">90deg</span>
+            </div>
+            <input type="range" id="gradAngle" min="0" max="360" value="90" oninput="updateGradient()" />
+          </div>
+        </div>
+        <div class="label-row" style="margin-bottom: 12px; margin-top: 16px; align-items: center;">
+          <label style="margin:0">Detalles (Color & Opacidad)</label>
+          <button class="btn-small" style="padding: 6px 12px; font-size: 0.7rem;" onclick="randomGradient()">Random Mix</button>
+        </div>
+        <div id="stopsContainer" class="stops-list"></div>
+        <div class="output-box" style="margin-top: 20px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO</span>
+            <button class="copy-btn" onclick="copyText('gradientResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="gradientResult">...</div>
+        </div>
+      </div>
+
+      <div id="section-converter" class="tool-section">
+        <h2>Color Converter</h2>
+        <div class="grid-pair">
+          <div class="input-group">
+            <div class="label-row" style="justify-content: space-between; margin-bottom: 5px;">
+                <label style="margin:0">Color Base (HEX)</label>
+                <button class="btn-small" style="padding: 4px 8px; font-size: 0.7rem;" onclick="App.converter.random()">Random</button>
+            </div>
+            <div class="pro-color-picker">
+              <div class="color-preview-box" id="convBox" style="background: #007aff">
+                <input type="color" id="convColor" value="#007aff" oninput="syncProPicker('conv', this.value)" />
+              </div>
+              <div class="hex-input-wrapper">
+                <input type="text" id="convText" value="#007AFF" oninput="syncProPicker('conv', this.value)" />
+              </div>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label>Opacidad (Alpha)</label><span id="convOpacityVal" style="font-size: 0.75rem">100%</span>
+            </div>
+            <input type="range" id="convOpacity" min="0" max="100" value="100" oninput="updateConverter()" />
+          </div>
+        </div>
+        <div class="preview-container" style="height: 160px">
+          <div id="converterPreviewBox"></div>
+        </div>
+        <div class="conv-card">
+          <span class="conv-label">HEX</span>
+          <input type="text" class="conv-value-input" id="resHex" value="#007AFF" oninput="App.converter.fromHex(this.value)" />
+          <button class="copy-btn conv-copy-btn" onclick="copyText('resHex', this)">Copiar</button>
+        </div>
+        <div class="conv-card">
+          <span class="conv-label">RGB / RGBA</span>
+          <input type="text" class="conv-value-input" id="resRgb" value="rgb(0, 122, 255)" oninput="App.converter.fromRgb(this.value)" />
+          <button class="copy-btn conv-copy-btn" onclick="copyText('resRgb', this)">Copiar</button>
+        </div>
+        <div class="conv-card">
+          <span class="conv-label">HSL / HSLA</span>
+          <input type="text" class="conv-value-input" id="resHsl" value="hsl(211, 100%, 50%)" oninput="App.converter.fromHsl(this.value)" />
+          <button class="copy-btn conv-copy-btn" onclick="copyText('resHsl', this)">Copiar</button>
+        </div>
+      </div>
+
+      <div id="section-blob" class="tool-section">
+        <h2>Shape Generator</h2>
+        <div class="blob-type-group" style="margin-bottom: 24px">
+          <button class="blob-type-btn active" id="shapeToolBlob" onclick="App.shape.switchTool('blob')">Organic Blob</button>
+          <button class="blob-type-btn" id="shapeToolTriangle" onclick="App.shape.switchTool('triangle')">CSS Triangle</button>
+          <button class="blob-type-btn" id="shapeToolClipPath" onclick="App.shape.switchTool('clipPath')">Clip-Path</button>
+        </div>
+        <div class="preview-container" style="height: 340px; background-image: var(--checker-pattern); display: flex; align-items: center; justify-content: center;">
+          <div id="blobPreview" style="display: block"></div>
+          <div id="trianglePreview" style="display: none; width: 0; height: 0; border-style: solid; transition: all 0.2s;"></div>
+        </div>
+
+        <div id="controls-blob">
+          <div class="blob-type-group">
+            <button class="blob-type-btn active" id="typeSolid" onclick="setBlobType('solid')">Sólido</button>
+            <button class="blob-type-btn" id="typeOutline" onclick="setBlobType('outline')">Outline</button>
+            <button class="blob-type-btn" id="typeGradient" onclick="setBlobType('gradient')">Gradient</button>
+          </div>
+          <div class="grid-pair" id="blobColorControls">
+            <div class="input-group">
+              <label>Color 1</label>
+              <div class="pro-color-picker">
+                <div class="color-preview-box" id="blobC1Box" style="background: #007aff">
+                  <input type="color" id="blobC1Color" value="#007aff" oninput="syncProPicker('blobC1', this.value)" />
+                </div>
+                <div class="hex-input-wrapper">
+                  <input type="text" id="blobC1Text" value="#007AFF" oninput="syncProPicker('blobC1', this.value)" />
+                </div>
+              </div>
+            </div>
+            <div class="input-group" id="blobCol2Group" style="display: none">
+              <label>Color 2</label>
+              <div class="pro-color-picker">
+                <div class="color-preview-box" id="blobC2Box" style="background: #34c759">
+                  <input type="color" id="blobC2Color" value="#34c759" oninput="syncProPicker('blobC2', this.value)" />
+                </div>
+                <div class="hex-input-wrapper">
+                  <input type="text" id="blobC2Text" value="#34C759" oninput="syncProPicker('blobC2', this.value)" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid-pair" id="blobOutlineGroup" style="display: none">
+            <div class="input-group" style="grid-column: span 2">
+              <div class="label-row">
+                <label>Grosor Borde</label><span id="valBorder" style="font-size: 0.75rem">4px</span>
+              </div>
+              <input type="range" id="blobBorderWidth" min="1" max="20" value="4" oninput="generateBlob()" />
+            </div>
+          </div>
+          <div class="grid-pair">
+            <div class="input-group">
+              <div class="label-row">
+                <label>Complejidad</label><span id="valComplexity" style="font-size: 0.75rem">0.5</span>
+              </div>
+              <input type="range" id="blobComplexity" min="0.1" max="0.9" step="0.05" value="0.5" oninput="generateBlob()" />
+            </div>
+            <div class="input-group">
+              <div class="label-row">
+                <label>Suavidad</label><span id="valSmoothness" style="font-size: 0.75rem">0.5</span>
+              </div>
+              <input type="range" id="blobSmoothness" min="0" max="1" step="0.05" value="0.5" oninput="generateBlob()" />
+            </div>
+          </div>
+          <div class="input-group" style="margin-bottom: 20px">
+            <div class="label-row">
+              <label>Tamaño (px)</label><span id="valSize" style="font-size: 0.75rem">200px</span>
+            </div>
+            <input type="range" id="blobSize" min="50" max="300" value="200" oninput="updateBlobSize()" />
+          </div>
+          <div style="display: flex; justify-content: center; margin-bottom: 20px">
+            <button class="btn-small" style="width: 100%; justify-content: center; padding: 12px" onclick="generateBlob()">Randomize Shape</button>
+          </div>
+        </div>
+
+        <div id="controls-triangle" style="display: none">
+          <div class="grid-pair">
+            <div class="input-group">
+              <label>Dirección</label>
+              <select id="triDirection" onchange="App.shape.generateTriangle()">
+                <option value="top">Arriba (Top)</option>
+                <option value="bottom">Abajo (Bottom)</option>
+                <option value="left">Izquierda (Left)</option>
+                <option value="right" selected>Derecha (Right)</option>
+                <option value="top-left">Sup. Izq (Top-Left)</option>
+                <option value="top-right">Sup. Der (Top-Right)</option>
+                <option value="bottom-left">Inf. Izq (Bottom-Left)</option>
+                <option value="bottom-right">Inf. Der (Bottom-Right)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Color</label>
+              <div class="pro-color-picker">
+                <div class="color-preview-box" id="triColBox" style="background: #ff9500">
+                  <input type="color" id="triColor" value="#ff9500" oninput="syncProPicker('tri', this.value)" />
+                </div>
+                <div class="hex-input-wrapper">
+                  <input type="text" id="triText" value="#FF9500" oninput="syncProPicker('tri', this.value)" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid-pair">
+            <div class="input-group">
+              <div class="label-row">
+                <label>Ancho (Width)</label><span id="valTriW" style="font-size: 0.75rem">100px</span>
+              </div>
+              <input type="range" id="triWidth" min="10" max="300" value="100" oninput="App.shape.generateTriangle()" />
+            </div>
+            <div class="input-group">
+              <div class="label-row">
+                <label>Alto (Height)</label><span id="valTriH" style="font-size: 0.75rem">100px</span>
+              </div>
+              <input type="range" id="triHeight" min="10" max="300" value="100" oninput="App.shape.generateTriangle()" />
+            </div>
+          </div>
+        </div>
+
+        <div id="controls-clip-path" style="display: none; text-align: center;">
+          <div class="shape-grid">
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('triangle')" title="Triangle"><svg viewBox="0 0 100 100"><polygon points="50,0 0,100 100,100"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('trapezoid')" title="Trapezoid"><svg viewBox="0 0 100 100"><polygon points="20,0 80,0 100,100 0,100"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('parallelogram')" title="Parallelogram"><svg viewBox="0 0 100 100"><polygon points="25,0 100,0 75,100 0,100"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('rhombus')" title="Rhombus"><svg viewBox="0 0 100 100"><polygon points="50,0 100,50 50,100 0,50"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('pentagon')" title="Pentagon"><svg viewBox="0 0 100 100"><polygon points="50,0 100,38 82,100 18,100 0,38"/></svg></button>
+            
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('hexagon')" title="Hexagon"><svg viewBox="0 0 100 100"><polygon points="25,0 75,0 100,50 75,100 25,100 0,50"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('heptagon')" title="Heptagon"><svg viewBox="0 0 100 100"><polygon points="50,0 90,20 100,60 75,100 25,100 0,60 10,20"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('octagon')" title="Octagon"><svg viewBox="0 0 100 100"><polygon points="30,0 70,0 100,30 100,70 70,100 30,100 0,70 0,30"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('nonagon')" title="Nonagon"><svg viewBox="0 0 100 100"><polygon points="50,0 83,12 100,43 94,78 68,100 32,100 6,78 0,43 17,12"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('decagon')" title="Decagon"><svg viewBox="0 0 100 100"><polygon points="50,0 80,10 100,35 100,70 80,90 50,100 20,90 0,70 0,35 20,10"/></svg></button>
+
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('bevel')" title="Bevel"><svg viewBox="0 0 100 100"><polygon points="20,0 80,0 100,20 100,80 80,100 20,100 0,80 0,20"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('rabbet')" title="Rabbet"><svg viewBox="0 0 100 100"><polygon points="0,0 100,0 100,75 75,75 75,100 25,100 25,75 0,75"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('leftArrow')" title="Left Arrow"><svg viewBox="0 0 100 100"><polygon points="40,0 40,20 100,20 100,80 40,80 40,100 0,50"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('rightArrow')" title="Right Arrow"><svg viewBox="0 0 100 100"><polygon points="0,20 60,20 60,0 100,50 60,100 60,80 0,80"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('leftPoint')" title="Left Point"><svg viewBox="0 0 100 100"><polygon points="25,0 100,0 100,100 25,100 0,50"/></svg></button>
+
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('rightPoint')" title="Right Point"><svg viewBox="0 0 100 100"><polygon points="0,0 75,0 100,50 75,100 0,100"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('star')" title="Star"><svg viewBox="0 0 100 100"><polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('cross')" title="Cross"><svg viewBox="0 0 100 100"><polygon points="10,25 35,25 35,0 65,0 65,25 90,25 90,50 65,50 65,100 35,100 35,50 10,50"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('message')" title="Message"><svg viewBox="0 0 100 100"><polygon points="0,0 100,0 100,75 75,75 75,100 50,75 0,75"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('close')" title="Close"><svg viewBox="0 0 100 100"><polygon points="20,0 0,20 30,50 0,80 20,100 50,70 80,100 100,80 70,50 100,20 80,0 50,30"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('frame')" title="Frame"><svg viewBox="0 0 100 100"><polygon points="0,0 0,100 25,100 25,25 75,25 75,75 25,75 25,100 100,100 100,0"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('leftChevron')" title="Left Chevron"><svg viewBox="0 0 100 100"><polygon points="100,0 75,50 100,100 25,100 0,50 25,0"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('rightChevron')" title="Right Chevron"><svg viewBox="0 0 100 100"><polygon points="75,0 100,50 75,100 0,100 25,50 0,0"/></svg></button>
+            <button class="btn-shape" onclick="App.shape.clipPath.setShape('minus')" title="Minus"><svg viewBox="0 0 100 100"><polygon points="0,40 100,40 100,60 0,60"/></svg></button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0; margin-bottom: 15px;">
+            Haz clic en el área para añadir puntos. Arrástralos para moverlos.
+          </p>
+          <div id="clipPathContainer" style="width: 100%; aspect-ratio: 1/1; max-width: 300px; margin: 0 auto 20px; touch-action: none; position: relative; border: 1px dashed var(--border-color); border-radius: 10px; background-image: var(--checker-pattern);">
+             <!-- SVG se inyectará aquí -->
+          </div>
+          <button class="btn-small" style="width: 100%; justify-content: center;" onclick="App.shape.clipPath.reset()">Resetear Polígono</button>
+        </div>
+
+        <div class="output-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO</span>
+            <button class="copy-btn" onclick="copyText('shapeResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="shapeResult"></div>
+        </div>
+      </div>
+
+      <div id="section-filter" class="tool-section">
+        <h2>CSS Filter Studio</h2>
+        <div class="preview-container" style="height: 280px; padding: 0; overflow: hidden; position: relative;">
+          <img id="filterPreviewImg" src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" style="width: 100%; height: 100%; object-fit: cover; transition: filter 0.2s;" alt="Preview" />
+          <button class="action-btn" style="position: absolute; bottom: 12px; right: 12px; background: rgba(0, 0, 0, 0.6);" onclick="App.filter.randomImage()">🔄 Nueva Imagen</button>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <div class="label-row">
+              <label>Brillo (Brightness)</label><span id="valFlBright">100%</span>
+            </div>
+            <input type="range" id="flBright" min="0" max="200" value="100" oninput="App.filter.update()" />
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label>Contraste</label><span id="valFlContrast">100%</span>
+            </div>
+            <input type="range" id="flContrast" min="0" max="200" value="100" oninput="App.filter.update()" />
+          </div>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <div class="label-row">
+              <label>Saturación</label><span id="valFlSaturate">100%</span>
+            </div>
+            <input type="range" id="flSaturate" min="0" max="200" value="100" oninput="App.filter.update()" />
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label>Sepia</label><span id="valFlSepia">0%</span>
+            </div>
+            <input type="range" id="flSepia" min="0" max="100" value="0" oninput="App.filter.update()" />
+          </div>
+        </div>
+        <div class="grid-triple">
+          <div class="input-group">
+            <div class="label-row">
+              <label>Grayscale</label><span id="valFlGray">0%</span>
+            </div>
+            <input type="range" id="flGray" min="0" max="100" value="0" oninput="App.filter.update()" />
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label>Blur (px)</label><span id="valFlBlur">0px</span>
+            </div>
+            <input type="range" id="flBlur" min="0" max="20" value="0" step="0.5" oninput="App.filter.update()" />
+          </div>
+          <div class="input-group">
+            <div class="label-row">
+              <label>Hue Rotate</label><span id="valFlHue">0deg</span>
+            </div>
+            <input type="range" id="flHue" min="0" max="360" value="0" oninput="App.filter.update()" />
+          </div>
+        </div>
+        <div class="input-group">
+          <div class="label-row">
+            <label>Invertir Colores</label><span id="valFlInvert">0%</span>
+          </div>
+          <input type="range" id="flInvert" min="0" max="100" value="0" oninput="App.filter.update()" />
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 10px;">
+          <button class="btn-small" style="width: 100%; justify-content: center; color: var(--fail-color);" onclick="App.filter.reset()">Reset Filters</button>
+        </div>
+        <div class="output-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO</span>
+            <button class="copy-btn" onclick="copyText('filterResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="filterResult">filter: none;</div>
+        </div>
+      </div>
+
+      <div id="section-flex" class="tool-section">
+        <h2>Flexbox Playground</h2>
+        <div style="position: relative; margin-bottom: 20px">
+          <div id="flexPreview" class="flex-preview-box"></div>
+          <div style="position: absolute; bottom: 10px; right: 10px; display: flex; gap: 8px;">
+            <button class="action-btn" onclick="App.flex.modifyItems(-1)" style="width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.6);">-</button>
+            <button class="action-btn" onclick="App.flex.modifyItems(1)" style="width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; background: var(--apple-blue);">+</button>
+          </div>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Direction</label>
+            <select id="fxDir" onchange="App.flex.update()">
+              <option value="row" selected>Row (Fila)</option>
+              <option value="column">Column (Columna)</option>
+              <option value="row-reverse">Row Reverse</option>
+              <option value="column-reverse">Column Reverse</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Wrap</label>
+            <select id="fxWrap" onchange="App.flex.update()">
+              <option value="nowrap" selected>No Wrap</option>
+              <option value="wrap">Wrap (Saltar)</option>
+              <option value="wrap-reverse">Wrap Reverse</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Justify Content (Eje Principal)</label>
+            <select id="fxJustify" onchange="App.flex.update()">
+              <option value="flex-start" selected>Flex Start</option>
+              <option value="center">Center</option>
+              <option value="flex-end">Flex End</option>
+              <option value="space-between">Space Between</option>
+              <option value="space-around">Space Around</option>
+              <option value="space-evenly">Space Evenly</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Align Items (Eje Cruzado)</label>
+            <select id="fxAlign" onchange="App.flex.update()">
+              <option value="stretch" selected>Stretch</option>
+              <option value="flex-start">Flex Start</option>
+              <option value="center">Center</option>
+              <option value="flex-end">Flex End</option>
+              <option value="baseline">Baseline</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <div class="label-row">
+            <label>Gap (Espacio)</label><span id="valFxGap">16px</span>
+          </div>
+          <input type="range" id="fxGap" min="0" max="50" value="16" oninput="App.flex.update()" />
+        </div>
+        <div class="output-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO</span>
+            <button class="copy-btn" onclick="copyText('flexResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="flexResult">display: flex; ...</div>
+        </div>
+      </div>
+      <div id="section-grid" class="tool-section">
+        <div class="header-row" style="margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+           <h2 style="margin:0; text-align: left;">Grid Builder Pro</h2>
+           <div class="tabs-container" style="width: auto; margin:0;">
+             <button class="tab-btn active" id="view-desktop" onclick="App.grid.setView('desktop')">🖥️ Desktop</button>
+             <button class="tab-btn" id="view-mobile" onclick="App.grid.setView('mobile')">📱 Mobile</button>
+           </div>
+        </div>
+
+        <div class="grid-triple">
+          <div class="input-group">
+            <label>Columnas</label>
+            <input type="number" id="grCols" value="4" min="1" max="12" oninput="App.grid.updateConfig()" />
+          </div>
+          <div class="input-group">
+            <label>Filas</label>
+            <input type="number" id="grRows" value="4" min="1" max="12" oninput="App.grid.updateConfig()" />
+          </div>
+          <div class="input-group">
+            <label>Gap (px)</label>
+            <input type="number" id="grGap" value="10" min="0" max="50" oninput="App.grid.updateConfig()" />
+          </div>
+        </div>
+
+        <div class="preview-container" style="height: auto; min-height: 350px; padding: 20px; align-items: flex-start; overflow: hidden; background-color: var(--input-bg);">
+          <div id="gridPreviewBox" class="grid-pro-container">
+            </div>
+        </div>
+
+        <div class="app-container" style="box-shadow: none; border: 1px solid var(--border-color); margin-bottom: 20px; padding: 15px; background: var(--card-bg);">
+            <div class="label-row" style="margin-bottom: 10px; justify-content: space-between; align-items: center;">
+                <label style="font-size: 0.9rem; color: var(--apple-blue); margin: 0;">EDITOR DE ÍTEM</label>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-small" onclick="App.grid.addItem()" style="background: var(--pass-color); color: white; border: none;">+ Añadir Div</button>
+                    <button class="btn-small" onclick="App.grid.deleteItem()" style="background: var(--fail-color); color: white; border: none;">Eliminar</button>
+                </div>
+            </div>
+            
+            <div id="itemControls" style="opacity: 0.5; pointer-events: none; transition: 0.3s;">
+                <div class="grid-pair">
+                    <div class="input-group">
+                        <label>Columna Inicio (Posición)</label>
+                        <input type="number" id="itemColStart" min="1" placeholder="Auto" oninput="App.grid.updateItem()" />
+                    </div>
+                    <div class="input-group">
+                        <label>Ancho (Columnas a ocupar)</label>
+                        <input type="number" id="itemColSpan" min="1" value="1" oninput="App.grid.updateItem()" />
+                    </div>
+                </div>
+                <div class="grid-pair">
+                    <div class="input-group">
+                        <label>Fila Inicio (Posición)</label>
+                        <input type="number" id="itemRowStart" min="1" placeholder="Auto" oninput="App.grid.updateItem()" />
+                    </div>
+                    <div class="input-group">
+                        <label>Alto (Filas a ocupar)</label>
+                        <input type="number" id="itemRowSpan" min="1" value="1" oninput="App.grid.updateItem()" />
+                    </div>
+                </div>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 5px; text-align: center;">
+                * Selecciona un cuadrado azul arriba para editar su posición.
+            </div>
+        </div>
+
+        <div class="output-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO (RESPONSIVE)</span>
+            <button class="copy-btn" onclick="copyText('gridResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="gridResult"></div>
+          
+          <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">HTML</span>
+            <div class="code-result" id="gridHtmlResult" style="margin-top: 5px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/utils/utils.js"></script>
+    <script src="js/core/core.js"></script>
+    <script src="js/modules/clamp.js"></script>
+    <script src="js/modules/ratio.js"></script>
+    <script src="js/modules/placeholder.js"></script>
+    <script src="js/modules/shadow.js"></script>
+    <script src="js/modules/contrast.js"></script>
+    <script src="js/modules/gradient.js"></script>
+    <script src="js/modules/converter.js"></script>
+    <script src="js/modules/shape.js"></script>
+    <script src="js/modules/filter.js"></script>
+    <script src="js/modules/flex.js"></script>
+    <script src="js/modules/grid.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
