@@ -30,5 +30,6 @@ App.core = {
         if (t === "filter") App.filter.update();
         if (t === "flex") App.flex.init();
         if (t === "grid") App.grid.init();
+        if (t === "palette") App.palette.init();
     },
 };

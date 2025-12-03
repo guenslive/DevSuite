@@ -14,6 +14,7 @@ App.syncProPicker = function(prefix, value) {
         if (prefix === "conv") App.converter.update();
         if (prefix.startsWith("blob")) App.shape.generateBlob();
         if (prefix.startsWith("tri")) App.shape.generateTriangle();
+        if (prefix === "pal") App.palette.updateBaseColor(value);
     } else {
         if (textInput) textInput.value = value;
     }
@@ -35,7 +36,7 @@ App.init = function() {
         });
     });
     App.clamp.calc(); App.ratio.calc(); App.placeholder.draw(); App.shadow.update(); App.contrast.calc();
-    App.gradient.init(); App.converter.update(); App.shape.generateBlob(); App.shape.clipPath.init(); App.filter.update(); App.flex.init();
+    App.gradient.init(); App.converter.update(); App.shape.generateBlob(); App.shape.clipPath.init(); App.filter.update(); App.flex.init(); App.palette.init();
 };
 
 /* --- COMPATIBILITY LAYER FOR HTML HANDLERS --- */

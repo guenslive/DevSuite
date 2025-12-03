@@ -35,6 +35,7 @@
           <button class="tab-btn" onclick="switchTab('filter')">Filters</button>
           <button class="tab-btn" onclick="switchTab('flex')">Flexbox</button>
           <button class="tab-btn" onclick="switchTab('grid')">Grid</button>
+          <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
         </div>
         <button class="theme-toggle-btn" onclick="toggleTheme()">
           <svg id="sunIcon" style="display: none" viewBox="0 0 24 24">
@@ -894,6 +895,50 @@
           </div>
         </div>
       </div>
+
+      <div id="section-palette" class="tool-section">
+        <h2>Palette Generator</h2>
+        
+        <div class="palette-dashboard">
+            <!-- Left Column: Controls & Info -->
+            <div class="palette-controls">
+                <div class="palette-header-info" id="paletteInfo">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="palette-main-picker">
+                    <div class="color-preview-large" id="palBox" style="background: #007aff">
+                        <input type="color" id="palColor" value="#007aff" oninput="syncProPicker('pal', this.value)" />
+                    </div>
+                    <div class="hex-input-wrapper large-input">
+                        <input type="text" id="palText" value="#007AFF" oninput="syncProPicker('pal', this.value)" />
+                        <button class="btn-small" onclick="App.palette.random()" style="margin-left: 8px;">Random</button>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label style="margin-bottom: 8px; display: block; font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">HARMONY RULE</label>
+                    <select id="harmonySelect" class="custom-select" onchange="App.palette.setHarmony(this.value)">
+                        <option value="analogous">Analogous</option>
+                        <option value="monochromatic">Monochromatic</option>
+                        <option value="triadic">Triadic</option>
+                        <option value="complementary">Complementary</option>
+                        <option value="split">Split Complementary</option>
+                        <option value="tetradic">Tetradic</option>
+                        <option value="square">Square</option>
+                        <option value="shades">Shades (Scale)</option>
+                        <option value="tints">Tints (Scale)</option>
+                        <option value="tones">Tones (Scale)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Right Column: Selected Harmony -->
+            <div class="palette-results" id="paletteContainer">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+      </div>
     </div>
 
     <script src="js/app.js"></script>
@@ -910,6 +955,7 @@
     <script src="js/modules/filter.js"></script>
     <script src="js/modules/flex.js"></script>
     <script src="js/modules/grid.js"></script>
+    <script src="js/modules/palette.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
