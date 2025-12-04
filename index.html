@@ -36,6 +36,7 @@
           <button class="tab-btn" onclick="switchTab('flex')">Flexbox</button>
           <button class="tab-btn" onclick="switchTab('grid')">Grid</button>
           <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
+          <button class="tab-btn" onclick="switchTab('transform')">Transform</button>
         </div>
         <button class="theme-toggle-btn" onclick="toggleTheme()">
           <svg id="sunIcon" style="display: none" viewBox="0 0 24 24">
@@ -939,6 +940,210 @@
             </div>
         </div>
       </div>
+
+      <div id="section-transform" class="tool-section">
+        <h2>Transform Generator</h2>
+        
+        <!-- Tabs de Modo -->
+        <div class="blob-type-group" style="margin-bottom: 20px">
+            <button class="blob-type-btn active" id="tfTab2D" onclick="App.transform.switchTab('2d')">2D & Position</button>
+            <button class="blob-type-btn" id="tfTab3D" onclick="App.transform.switchTab('3d')">3D Rotation</button>
+            <button class="blob-type-btn" id="tfTabSettings" onclick="App.transform.switchTab('settings')">Settings</button>
+        </div>
+
+        <!-- Animation Toggle -->
+        <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; background: var(--bg-secondary); padding: 10px 15px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.2rem;">🎬</span>
+                <span style="font-weight: 600; font-size: 0.9rem;">Animation Mode</span>
+            </div>
+            <label class="switch" style="position: relative; display: inline-block; width: 40px; height: 24px;">
+                <input type="checkbox" id="tfAnimToggle" onchange="App.transform.toggleAnimMode()">
+                <span class="slider round" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;"></span>
+                <style>
+                    .switch input { opacity: 0; width: 0; height: 0; }
+                    .slider.round:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+                    input:checked + .slider { background-color: var(--pass-color); }
+                    input:checked + .slider:before { transform: translateX(16px); }
+                </style>
+            </label>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="preview-container" style="height: 340px; perspective: 1000px; overflow: hidden; background: var(--bg-secondary); position: relative;">
+            <!-- Grid de fondo para referencia -->
+            <div style="position: absolute; inset: 0; background-image: linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.3; transform: perspective(500px) rotateX(60deg) scale(2); pointer-events: none;"></div>
+            
+            <!-- Objeto Transformable -->
+            <div id="transformPreviewBox" style="width: 160px; height: 160px; background: linear-gradient(135deg, #007aff, #00c6ff); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; box-shadow: 0 20px 40px rgba(0,0,0,0.3); transition: transform 0.1s; backface-visibility: visible;">
+                <span style="font-size: 2rem; margin-bottom: 5px;">📦</span>
+                <span>DevTools</span>
+                <div class="face-indicator" style="font-size: 0.6rem; opacity: 0.7; margin-top: 5px;">FRONT</div>
+            </div>
+        </div>
+
+        <!-- Timeline (Solo visible en modo Animación) -->
+        <div id="tfTimeline" style="display: none; margin-bottom: 20px; background: var(--bg-secondary); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">KEYFRAMES</label>
+                <div style="display: flex; gap: 5px;">
+                    <button class="btn-small" onclick="App.transform.addKeyframe()">+ Add Step</button>
+                    <button class="btn-small" style="background: var(--fail-color); color: white;" onclick="App.transform.deleteKeyframe()">Delete</button>
+                </div>
+            </div>
+            
+            <div id="tfKeyframeEditor" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <span style="font-size: 0.8rem; font-weight: 600;">Selected Step:</span>
+                <input type="number" id="tfKfPercent" min="0" max="100" style="width: 70px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-primary);" onchange="App.transform.updateKeyframePercent(this.value)">
+                <span style="font-size: 0.8rem;">%</span>
+                <span style="font-size: 0.7rem; color: var(--text-secondary); margin-left: auto;">(Edit to move)</span>
+            </div>
+
+            <div id="tfKeyframesList" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+                <!-- Generado por JS -->
+            </div>
+            
+            <div class="grid-pair" style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <div class="input-group">
+                    <label>Duration (s)</label>
+                    <input type="number" id="animDuration" value="2" step="0.1" min="0.1" oninput="App.transform.updateAnimSettings()">
+                </div>
+                <div class="input-group">
+                    <label>Timing Function</label>
+                    <select id="animTiming" onchange="App.transform.updateAnimSettings()">
+                        <option value="linear">Linear</option>
+                        <option value="ease">Ease</option>
+                        <option value="ease-in">Ease In</option>
+                        <option value="ease-out">Ease Out</option>
+                        <option value="ease-in-out" selected>Ease In Out</option>
+                        <option value="steps(4)">Steps(4)</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                 <button id="btnPlayAnim" class="action-btn" style="width: 100%; justify-content: center; background: var(--pass-color);" onclick="App.transform.togglePlay()">▶ Play Animation</button>
+            </div>
+        </div>
+
+        <!-- Controles 2D -->
+        <div id="tfControls2D">
+            <div class="grid-pair">
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Scale</label>
+                        <input type="number" id="tfScaleNum" value="1" step="0.1" class="tiny-input" oninput="App.transform.syncInput('scale', this.value)">
+                    </div>
+                    <input type="range" id="tfScale" min="0.1" max="3" step="0.1" value="1" oninput="App.transform.syncInput('scale', this.value)" />
+                </div>
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Perspective (px)</label>
+                        <input type="number" id="tfPerspectiveNum" value="1000" step="50" class="tiny-input" oninput="App.transform.syncInput('perspective', this.value)">
+                    </div>
+                    <input type="range" id="tfPerspective" min="200" max="2000" value="1000" oninput="App.transform.syncInput('perspective', this.value)" />
+                </div>
+            </div>
+            <div class="grid-pair">
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Translate X (px)</label>
+                        <input type="number" id="tfTranslateXNum" value="0" class="tiny-input" oninput="App.transform.syncInput('translateX', this.value)">
+                    </div>
+                    <input type="range" id="tfTranslateX" min="-200" max="200" value="0" oninput="App.transform.syncInput('translateX', this.value)" />
+                </div>
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Translate Y (px)</label>
+                        <input type="number" id="tfTranslateYNum" value="0" class="tiny-input" oninput="App.transform.syncInput('translateY', this.value)">
+                    </div>
+                    <input type="range" id="tfTranslateY" min="-200" max="200" value="0" oninput="App.transform.syncInput('translateY', this.value)" />
+                </div>
+            </div>
+            <div class="grid-pair">
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Skew X (deg)</label>
+                        <input type="number" id="tfSkewXNum" value="0" class="tiny-input" oninput="App.transform.syncInput('skewX', this.value)">
+                    </div>
+                    <input type="range" id="tfSkewX" min="-90" max="90" value="0" oninput="App.transform.syncInput('skewX', this.value)" />
+                </div>
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Skew Y (deg)</label>
+                        <input type="number" id="tfSkewYNum" value="0" class="tiny-input" oninput="App.transform.syncInput('skewY', this.value)">
+                    </div>
+                    <input type="range" id="tfSkewY" min="-90" max="90" value="0" oninput="App.transform.syncInput('skewY', this.value)" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles 3D -->
+        <div id="tfControls3D" style="display: none;">
+            <div class="grid-triple">
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Rotate X</label>
+                        <input type="number" id="tfRotateXNum" value="0" class="tiny-input" oninput="App.transform.syncInput('rotateX', this.value)">
+                    </div>
+                    <input type="range" id="tfRotateX" min="-180" max="180" value="0" oninput="App.transform.syncInput('rotateX', this.value)" />
+                </div>
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Rotate Y</label>
+                        <input type="number" id="tfRotateYNum" value="0" class="tiny-input" oninput="App.transform.syncInput('rotateY', this.value)">
+                    </div>
+                    <input type="range" id="tfRotateY" min="-180" max="180" value="0" oninput="App.transform.syncInput('rotateY', this.value)" />
+                </div>
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Rotate Z</label>
+                        <input type="number" id="tfRotateZNum" value="0" class="tiny-input" oninput="App.transform.syncInput('rotateZ', this.value)">
+                    </div>
+                    <input type="range" id="tfRotateZ" min="-180" max="180" value="0" oninput="App.transform.syncInput('rotateZ', this.value)" />
+                </div>
+            </div>
+            <div class="input-group" style="margin-top: 20px;">
+                <label>Translate Z (Profundidad)</label>
+                <div class="label-row">
+                    <input type="range" id="tfTranslateZ" min="-500" max="500" value="0" oninput="App.transform.syncInput('translateZ', this.value)" />
+                    <input type="number" id="tfTranslateZNum" value="0" class="tiny-input" style="width: 60px" oninput="App.transform.syncInput('translateZ', this.value)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="tfControlsSettings" style="display: none;">
+            <div class="grid-pair">
+                <div class="input-group">
+                    <label>Transform Origin X (%)</label>
+                    <input type="range" id="tfOriginX" min="0" max="100" value="50" oninput="App.transform.update()" />
+                </div>
+                <div class="input-group">
+                    <label>Transform Origin Y (%)</label>
+                    <input type="range" id="tfOriginY" min="0" max="100" value="50" oninput="App.transform.update()" />
+                </div>
+            </div>
+            <div class="input-group" style="margin-top: 10px;">
+                <label>Opciones Extra</label>
+                <div class="checkbox-group" style="height: 50px">
+                    <label for="tfBackface" style="margin: 0; cursor: pointer; color: var(--text-primary); font-weight: 600; text-transform: none; font-size: 0.9rem;">Backface Visibility</label>
+                    <input type="checkbox" id="tfBackface" checked onchange="App.transform.update()" />
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 10px;">
+          <button class="btn-small" style="width: 100%; justify-content: center; color: var(--fail-color);" onclick="App.transform.reset()">Reset Transform</button>
+        </div>
+
+        <div class="output-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO</span>
+            <button class="copy-btn" onclick="copyText('transformResult', this)">Copiar</button>
+          </div>
+          <div class="code-result" id="transformResult"></div>
+        </div>
+      </div>
     </div>
 
     <script src="js/app.js"></script>
@@ -956,6 +1161,7 @@
     <script src="js/modules/flex.js"></script>
     <script src="js/modules/grid.js"></script>
     <script src="js/modules/palette.js"></script>
+    <script src="js/modules/transform.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
