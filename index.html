@@ -38,14 +38,72 @@
           <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
           <button class="tab-btn" onclick="switchTab('transform')">Transform</button>
         </div>
-        <button class="theme-toggle-btn" onclick="toggleTheme()">
-          <svg id="sunIcon" style="display: none" viewBox="0 0 24 24">
-            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
-          </svg>
-          <svg id="moonIcon" viewBox="0 0 24 24">
-            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
-          </svg>
-        </button>
+        <label class="switch">
+          <input id="themeSwitchInput" type="checkbox" onchange="App.core.toggleTheme()" />
+          <div class="slider round">
+            <div class="sun-moon">
+              <svg id="moon-dot-1" class="moon-dot" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="moon-dot-2" class="moon-dot" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="moon-dot-3" class="moon-dot" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="light-ray-1" class="light-ray" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="light-ray-2" class="light-ray" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="light-ray-3" class="light-ray" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+        
+              <svg id="cloud-1" class="cloud-dark" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="cloud-2" class="cloud-dark" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="cloud-3" class="cloud-dark" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="cloud-4" class="cloud-light" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="cloud-5" class="cloud-light" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+              <svg id="cloud-6" class="cloud-light" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50"></circle>
+              </svg>
+            </div>
+            <div class="stars">
+              <svg id="star-1" class="star" viewBox="0 0 20 20">
+                <path
+                  d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"
+                ></path>
+              </svg>
+              <svg id="star-2" class="star" viewBox="0 0 20 20">
+                <path
+                  d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"
+                ></path>
+              </svg>
+              <svg id="star-3" class="star" viewBox="0 0 20 20">
+                <path
+                  d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"
+                ></path>
+              </svg>
+              <svg id="star-4" class="star" viewBox="0 0 20 20">
+                <path
+                  d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </label>
       </div>
 
       <div id="section-clamp" class="tool-section active">
@@ -957,15 +1015,9 @@
                 <span style="font-size: 1.2rem;">🎬</span>
                 <span style="font-weight: 600; font-size: 0.9rem;">Animation Mode</span>
             </div>
-            <label class="switch" style="position: relative; display: inline-block; width: 40px; height: 24px;">
+            <label class="anim-switch">
                 <input type="checkbox" id="tfAnimToggle" onchange="App.transform.toggleAnimMode()">
-                <span class="slider round" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;"></span>
-                <style>
-                    .switch input { opacity: 0; width: 0; height: 0; }
-                    .slider.round:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-                    input:checked + .slider { background-color: var(--pass-color); }
-                    input:checked + .slider:before { transform: translateX(16px); }
-                </style>
+                <span class="slider"></span>
             </label>
         </div>
 

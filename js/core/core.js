@@ -6,15 +6,24 @@ App.core = {
         App.core.updateIcons(s);
     },
     toggleTheme() {
-        const n = App.state.theme === "dark" ? "light" : "dark";
+        let n;
+        // Check if triggered by the checkbox change event
+        if (event && event.target && event.target.id === "themeSwitchInput") {
+            n = event.target.checked ? "dark" : "light";
+        } else {
+            n = App.state.theme === "dark" ? "light" : "dark";
+        }
+        
         App.state.theme = n;
         document.documentElement.setAttribute("data-theme", n);
         localStorage.setItem("theme", n);
         App.core.updateIcons(n);
     },
     updateIcons(t) {
-        document.getElementById("sunIcon").style.display = t === "dark" ? "block" : "none";
-        document.getElementById("moonIcon").style.display = t === "dark" ? "none" : "block";
+        const checkbox = document.getElementById("themeSwitchInput");
+        if (checkbox) {
+            checkbox.checked = (t === "dark");
+        }
     },
     switchTab(t) {
         document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
