@@ -151,6 +151,9 @@ body {
 }
 
 @media (max-width: 768px) {
+  .header-row {
+    margin-bottom: 0px;
+  }
   .toggle-menu {
     display: flex;
   }
