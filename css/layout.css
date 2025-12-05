@@ -648,7 +648,7 @@ input[type="checkbox"] {
  --switch_height: 1em;
  --thumb_color: #e8e8e8;
  --track_color: #e8e8e8;
- --track_active_color: #888;
+ --track_active_color: #0a84ff;
  --outline_color: #000;
  font-size: 17px;
  position: relative;
