@@ -624,7 +624,7 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 605px) {
-  .header-row { justify-content: center; }
+  .header-row { justify-content: center; margin-bottom: 0px;}
   .app-container { padding: 24px; }
   .tabs-container{ width: 100%; }
   .theme-toggle-btn { margin-left: 0; }
