@@ -21,7 +21,7 @@ App.syncProPicker = function(prefix, value) {
 };
 
 App.init = function() {
-    // App.core.initTheme(); // Moved to HEAD
+    App.core.initTheme();
     const presets = ["#007AFF", "#34C759", "#FF3B30", "#FF9500", "#AF52DE", "#5856D6", "#5AC8FA", "#000000", "#FFFFFF"];
     ["phBg", "fg", "bg"].forEach((prefix) => {
         const container = document.getElementById(prefix + "Palette");
