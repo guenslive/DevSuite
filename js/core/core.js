@@ -19,6 +19,15 @@ App.core = {
         localStorage.setItem("theme", n);
         App.core.updateIcons(n);
     },
+    toggleMenu() {
+        const container = document.querySelector(".tabs-container");
+        const checkbox = document.getElementById("mobileMenuCheckbox");
+        if (checkbox && checkbox.checked) {
+            container.classList.add("show");
+        } else {
+            container.classList.remove("show");
+        }
+    },
     updateIcons(t) {
         const checkbox = document.getElementById("themeSwitchInput");
         if (checkbox) {
@@ -30,6 +39,15 @@ App.core = {
         if (event && event.target && event.target.classList.contains("tab-btn")) event.target.classList.add("active");
         document.querySelectorAll(".tool-section").forEach((s) => s.classList.remove("active"));
         document.getElementById("section-" + t).classList.add("active");
+
+        // Auto-close menu on mobile
+        const container = document.querySelector(".tabs-container");
+        if (window.innerWidth <= 768 && container.classList.contains("show")) {
+            container.classList.remove("show");
+            const checkbox = document.getElementById("mobileMenuCheckbox");
+            if (checkbox) checkbox.checked = false;
+        }
+
         if (t === "placeholder") App.placeholder.draw();
         if (t === "shadow") { App.shadow.update(); App.shadow.updateBg(); }
         if (t === "contrast") App.contrast.calc();

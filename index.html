@@ -17,12 +17,18 @@
     </script>
 
     <link rel="stylesheet" href="css/variables.css?v=745b7b14">
-    <link rel="stylesheet" href="css/layout.css?v=693e3f65">
+    <link rel="stylesheet" href="css/layout.css?v=39e337de">
     <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
   </head>
   <body>
     <div class="app-container">
       <div class="header-row">
+        <input id="mobileMenuCheckbox" type="checkbox" onchange="App.core.toggleMenu()">
+        <label class="toggle-menu" for="mobileMenuCheckbox">
+          <div id="bar1" class="bars"></div>
+          <div id="bar2" class="bars"></div>
+          <div id="bar3" class="bars"></div>
+        </label>
         <div class="tabs-container">
           <button class="tab-btn active" onclick="switchTab('clamp')">Clamp</button>
           <button class="tab-btn" onclick="switchTab('ratio')">Ratio</button>
@@ -1200,7 +1206,7 @@
 
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=57058776"></script>
-    <script src="js/core/core.js?v=d8f9e2aa"></script>
+    <script src="js/core/core.js?v=cbf9c5f2"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=4c4030b2"></script>
     <script src="js/modules/placeholder.js?v=e459bfb7"></script>

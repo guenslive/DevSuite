@@ -48,6 +48,95 @@ body {
   width: 85%;
   justify-content: space-between;
 }
+
+#mobileMenuCheckbox {
+  display: none;
+}
+
+.toggle-menu {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition-duration: .5s;
+}
+
+.bars {
+  width: 100%;
+  height: 4px;
+  background-color: var(--text-primary);
+  border-radius: 4px;
+}
+
+#bar2 {
+  transition-duration: .8s;
+}
+
+#bar1, #bar3 {
+  width: 80%;
+}
+
+#mobileMenuCheckbox:checked + .toggle-menu .bars {
+  position: absolute;
+  transition-duration: .5s;
+}
+
+#mobileMenuCheckbox:checked + .toggle-menu #bar2 {
+  transform: scaleX(0);
+  transition-duration: .5s;
+}
+
+#mobileMenuCheckbox:checked + .toggle-menu #bar1 {
+  width: 100%;
+  transform: rotate(45deg);
+  transition-duration: .5s;
+}
+
+#mobileMenuCheckbox:checked + .toggle-menu #bar3 {
+  width: 100%;
+  transform: rotate(-45deg);
+  transition-duration: .5s;
+}
+
+#mobileMenuCheckbox:checked + .toggle-menu {
+  transition-duration: .5s;
+  transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  .toggle-menu {
+    display: flex;
+  }
+  .tabs-container {
+    display: none;
+    width: 100%;
+    order: 3;
+    margin-top: 10px;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+  .tabs-container.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+  .tab-btn {
+    flex: 1 1 auto;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .tab-btn {
   border: none;
   background: transparent;
