@@ -24,6 +24,7 @@
   --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
   --track-color: #d1d1d6;
   --thumb-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --scroll-shadow: rgba(0, 0, 0, 0.15);
   --pass-color: #34c759;
   --fail-color: #ff3b30;
   --checker-pattern: repeating-conic-gradient(
@@ -47,6 +48,7 @@
   --code-text: #7bd7ff;
   --toggle-bg: rgba(255, 255, 255, 0.1);
   --toggle-icon: #ffcc00;
+  --scroll-shadow: rgba(0, 0, 0, 0.5);
   --preview-border: #3a3a3c;
   --track-color: #636366;
   --thumb-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);

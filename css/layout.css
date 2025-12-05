@@ -38,15 +38,57 @@ body {
   flex-wrap: wrap;
   gap: 10px;
 }
+.tabs-wrapper {
+  display: flex;
+  align-items: center;
+  width: 85%;
+  gap: 8px;
+  position: relative;
+}
+
 .tabs-container {
   display: flex;
   background: var(--input-bg);
   padding: 4px;
   border-radius: 14px;
   gap: 2px;
-  flex-wrap: wrap;
-  width: 85%;
-  justify-content: space-between;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+  justify-content: flex-start;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+  scroll-behavior: smooth;
+}
+
+.scroll-btn {
+  background: var(--input-bg);
+  border: none;
+  border-radius: 50%;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.scroll-btn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.scroll-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+.tabs-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Webkit */
 }
 
 #mobileMenuCheckbox {
@@ -112,13 +154,24 @@ body {
   .toggle-menu {
     display: flex;
   }
+  .tabs-wrapper {
+    width: 100%;
+    display: block;
+    order: 3;
+    margin-top: 10px;
+  }
+  .scroll-btn {
+    display: none;
+  }
   .tabs-container {
     display: none;
     width: 100%;
-    order: 3;
-    margin-top: 10px;
     justify-content: flex-start;
     gap: 4px;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    background: transparent;
+    padding: 0;
   }
   .tabs-container.show {
     display: flex;
@@ -147,6 +200,8 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s var(--bezier);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .tab-btn.active {
   background: var(--card-bg);

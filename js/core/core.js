@@ -28,6 +28,43 @@ App.core = {
             container.classList.remove("show");
         }
     },
+    scrollTabs(direction) {
+        const container = document.querySelector(".tabs-container");
+        if (!container) return;
+        const scrollAmount = 200;
+        container.scrollLeft += direction * scrollAmount;
+        // Update buttons after scroll animation (approx)
+        setTimeout(App.core.updateScrollButtons, 300);
+    },
+    updateScrollButtons() {
+        const container = document.querySelector(".tabs-container");
+        const leftBtn = document.getElementById("scrollLeftBtn");
+        const rightBtn = document.getElementById("scrollRightBtn");
+        
+        if (!container || !leftBtn || !rightBtn) return;
+        
+        // Hide buttons on mobile or if no scroll needed
+        if (window.innerWidth <= 768 || container.scrollWidth <= container.clientWidth) {
+            leftBtn.classList.add("hidden");
+            rightBtn.classList.add("hidden");
+            return;
+        }
+
+        // Left button
+        if (container.scrollLeft <= 10) {
+            leftBtn.classList.add("hidden");
+        } else {
+            leftBtn.classList.remove("hidden");
+        }
+
+        // Right button
+        // Allow a small buffer (1px) for calculation errors
+        if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 1) {
+            rightBtn.classList.add("hidden");
+        } else {
+            rightBtn.classList.remove("hidden");
+        }
+    },
     updateIcons(t) {
         const checkbox = document.getElementById("themeSwitchInput");
         if (checkbox) {

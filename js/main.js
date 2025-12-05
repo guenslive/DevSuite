@@ -37,6 +37,17 @@ App.init = function() {
     });
     App.clamp.calc(); App.ratio.calc(); App.placeholder.draw(); App.shadow.update(); App.contrast.calc();
     App.gradient.init(); App.converter.update(); App.shape.generateBlob(); App.shape.clipPath.init(); App.filter.update(); App.flex.init(); App.palette.init();
+    
+    // Initialize scroll buttons
+    App.core.updateScrollButtons();
+    const tabsContainer = document.querySelector(".tabs-container");
+    if (tabsContainer) {
+        tabsContainer.addEventListener("scroll", () => {
+            // Debounce slightly or just call directly
+            App.core.updateScrollButtons();
+        });
+        window.addEventListener("resize", App.core.updateScrollButtons);
+    }
 };
 
 /* --- COMPATIBILITY LAYER FOR HTML HANDLERS --- */

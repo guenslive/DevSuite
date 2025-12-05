@@ -16,8 +16,8 @@
       })();
     </script>
 
-    <link rel="stylesheet" href="css/variables.css?v=745b7b14">
-    <link rel="stylesheet" href="css/layout.css?v=39e337de">
+    <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
+    <link rel="stylesheet" href="css/layout.css?v=1eeb2ce1">
     <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
   </head>
   <body>
@@ -29,20 +29,28 @@
           <div id="bar2" class="bars"></div>
           <div id="bar3" class="bars"></div>
         </label>
-        <div class="tabs-container">
-          <button class="tab-btn active" onclick="switchTab('clamp')">Clamp</button>
-          <button class="tab-btn" onclick="switchTab('ratio')">Ratio</button>
-          <button class="tab-btn" onclick="switchTab('placeholder')">Image</button>
-          <button class="tab-btn" onclick="switchTab('shadow')">Shadow</button>
-          <button class="tab-btn" onclick="switchTab('contrast')">Contrast</button>
-          <button class="tab-btn" onclick="switchTab('gradient')">Gradient</button>
-          <button class="tab-btn" onclick="switchTab('converter')">Converter</button>
-          <button class="tab-btn" onclick="switchTab('blob')">Shape</button>
-          <button class="tab-btn" onclick="switchTab('filter')">Filters</button>
-          <button class="tab-btn" onclick="switchTab('flex')">Flexbox</button>
-          <button class="tab-btn" onclick="switchTab('grid')">Grid</button>
-          <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
-          <button class="tab-btn" onclick="switchTab('transform')">Transform</button>
+        <div class="tabs-wrapper">
+          <button id="scrollLeftBtn" class="scroll-btn" onclick="App.core.scrollTabs(-1)" aria-label="Scroll Left">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('clamp')">Clamp</button>
+            <button class="tab-btn" onclick="switchTab('ratio')">Ratio</button>
+            <button class="tab-btn" onclick="switchTab('placeholder')">Image</button>
+            <button class="tab-btn" onclick="switchTab('shadow')">Shadow</button>
+            <button class="tab-btn" onclick="switchTab('contrast')">Contrast</button>
+            <button class="tab-btn" onclick="switchTab('gradient')">Gradient</button>
+            <button class="tab-btn" onclick="switchTab('converter')">Converter</button>
+            <button class="tab-btn" onclick="switchTab('blob')">Shape</button>
+            <button class="tab-btn" onclick="switchTab('filter')">Filters</button>
+            <button class="tab-btn" onclick="switchTab('flex')">Flexbox</button>
+            <button class="tab-btn" onclick="switchTab('grid')">Grid</button>
+            <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
+            <button class="tab-btn" onclick="switchTab('transform')">Transform</button>
+          </div>
+          <button id="scrollRightBtn" class="scroll-btn" onclick="App.core.scrollTabs(1)" aria-label="Scroll Right">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
         </div>
         <label class="switch">
           <input id="themeSwitchInput" type="checkbox" onchange="App.core.toggleTheme()" />
@@ -1206,7 +1214,7 @@
 
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=57058776"></script>
-    <script src="js/core/core.js?v=cbf9c5f2"></script>
+    <script src="js/core/core.js?v=6cb84a9a"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=4c4030b2"></script>
     <script src="js/modules/placeholder.js?v=e459bfb7"></script>
@@ -1220,6 +1228,6 @@
     <script src="js/modules/grid.js?v=5c1a57ed"></script>
     <script src="js/modules/palette.js?v=57b330fd"></script>
     <script src="js/modules/transform.js?v=b1a6af0d"></script>
-    <script src="js/main.js?v=ff966e39"></script>
+    <script src="js/main.js?v=9dae20ee"></script>
   </body>
 </html>
