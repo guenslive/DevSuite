@@ -312,8 +312,15 @@
           </div>
         </div>
         <div class="output-box" style="display: flex; align-items: center; justify-content: space-between;">
-          <span class="code-result" style="color: #8e8e93">Descargar</span>
-          <button class="action-btn" onclick="downloadPlaceholder()">Guardar .JPG</button>
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <span class="code-result" style="color: #8e8e93; word-break: normal; white-space: nowrap;">Formato</span>
+            <select id="phFormat" style="padding: 4px 8px; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem; outline: none;">
+              <option value="png">PNG</option>
+              <option value="jpg" selected>JPG</option>
+              <option value="webp">WEBP</option>
+            </select>
+          </div>
+          <button class="action-btn" onclick="downloadPlaceholder()">Guardar</button>
         </div>
       </div>
 
@@ -1217,7 +1224,7 @@
     <script src="js/core/core.js?v=6cb84a9a"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=4c4030b2"></script>
-    <script src="js/modules/placeholder.js?v=f202620b"></script>
+    <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
     <script src="js/modules/shadow.js?v=0dcb215a"></script>
     <script src="js/modules/contrast.js?v=48375aaf"></script>
     <script src="js/modules/gradient.js?v=f4769657"></script>

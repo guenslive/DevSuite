@@ -25,9 +25,14 @@ App.placeholder = {
     download() {
         const w = parseInt(document.getElementById("phWidth").value) || 300;
         const h = parseInt(document.getElementById("phHeight").value) || 150;
+        const format = document.getElementById("phFormat").value;
+        let mime = "image/png";
+        if (format === "jpg") mime = "image/jpeg";
+        if (format === "webp") mime = "image/webp";
+
         const l = document.createElement("a");
-        l.download = `${w}x${h}.jpg`;
-        l.href = document.getElementById("placeholderCanvas").toDataURL("image/jpeg");
+        l.download = `${w}x${h}.${format}`;
+        l.href = document.getElementById("placeholderCanvas").toDataURL(mime);
         l.click();
     },
     randomColor() {
