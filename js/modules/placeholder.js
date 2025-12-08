@@ -23,9 +23,11 @@ App.placeholder = {
         ctx.fillText(t, w / 2, h / 2);
     },
     download() {
+        const w = parseInt(document.getElementById("phWidth").value) || 300;
+        const h = parseInt(document.getElementById("phHeight").value) || 150;
         const l = document.createElement("a");
-        l.download = "placeholder.png";
-        l.href = document.getElementById("placeholderCanvas").toDataURL();
+        l.download = `${w}x${h}.jpg`;
+        l.href = document.getElementById("placeholderCanvas").toDataURL("image/jpeg");
         l.click();
     },
     randomColor() {
