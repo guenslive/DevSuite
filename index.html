@@ -17,7 +17,7 @@
     </script>
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
-    <link rel="stylesheet" href="css/layout.css?v=fbff73af">
+    <link rel="stylesheet" href="css/layout.css?v=cd8c5a03">
     <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
   </head>
   <body>
@@ -29,6 +29,12 @@
           <div id="bar2" class="bars"></div>
           <div id="bar3" class="bars"></div>
         </label>
+        
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="toolSearch" placeholder="Search..." oninput="App.core.filterTools(this.value)" autocomplete="off">
+        </div>
+
         <div class="tabs-wrapper">
           <button id="scrollLeftBtn" class="scroll-btn" onclick="App.core.scrollTabs(-1)" aria-label="Scroll Left">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -1221,7 +1227,7 @@
 
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=57058776"></script>
-    <script src="js/core/core.js?v=6cb84a9a"></script>
+    <script src="js/core/core.js?v=47b59370"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=4c4030b2"></script>
     <script src="js/modules/placeholder.js?v=c8aec3a9"></script>

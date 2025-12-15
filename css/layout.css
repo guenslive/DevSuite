@@ -38,10 +38,52 @@ body {
   flex-wrap: wrap;
   gap: 10px;
 }
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  background: var(--input-bg);
+  border-radius: 12px;
+  padding: 0 10px;
+  height: 40px;
+  width: 140px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.search-wrapper:focus-within {
+  background: var(--bg-color);
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 1px var(--apple-blue);
+  width: 180px;
+}
+
+.search-icon {
+  color: var(--text-secondary);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+#toolSearch {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  width: 100%;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+}
+
+#toolSearch::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
 .tabs-wrapper {
   display: flex;
   align-items: center;
-  width: 85%;
+  flex: 1;
+  min-width: 0;
   gap: 8px;
   position: relative;
 }

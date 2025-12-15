@@ -28,6 +28,22 @@ App.core = {
             container.classList.remove("show");
         }
     },
+    filterTools(query) {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const q = query.toLowerCase().trim();
+        
+        tabs.forEach(tab => {
+            const text = tab.textContent.toLowerCase();
+            if (text.includes(q)) {
+                tab.style.display = '';
+            } else {
+                tab.style.display = 'none';
+            }
+        });
+        
+        // Update scroll buttons visibility since content width changed
+        setTimeout(() => App.core.updateScrollButtons(), 50);
+    },
     scrollTabs(direction) {
         const container = document.querySelector(".tabs-container");
         if (!container) return;
