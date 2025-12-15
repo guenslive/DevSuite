@@ -17,7 +17,7 @@
     </script>
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
-    <link rel="stylesheet" href="css/layout.css?v=cd8c5a03">
+    <link rel="stylesheet" href="css/layout.css?v=4ac8f124">
     <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
   </head>
   <body>
@@ -40,19 +40,28 @@
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
           </button>
           <div class="tabs-container">
+            <!-- Layout -->
             <button class="tab-btn active" onclick="switchTab('clamp')">Clamp</button>
             <button class="tab-btn" onclick="switchTab('ratio')">Ratio</button>
-            <button class="tab-btn" onclick="switchTab('placeholder')">Image</button>
-            <button class="tab-btn" onclick="switchTab('shadow')">Shadow</button>
-            <button class="tab-btn" onclick="switchTab('contrast')">Contrast</button>
-            <button class="tab-btn" onclick="switchTab('gradient')">Gradient</button>
-            <button class="tab-btn" onclick="switchTab('converter')">Converter</button>
-            <button class="tab-btn" onclick="switchTab('blob')">Shape</button>
-            <button class="tab-btn" onclick="switchTab('filter')">Filters</button>
             <button class="tab-btn" onclick="switchTab('flex')">Flexbox</button>
             <button class="tab-btn" onclick="switchTab('grid')">Grid</button>
-            <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
+            
+            <div class="tab-separator"></div>
+            
+            <!-- Effects -->
+            <button class="tab-btn" onclick="switchTab('shadow')">Shadow</button>
+            <button class="tab-btn" onclick="switchTab('gradient')">Gradient</button>
+            <button class="tab-btn" onclick="switchTab('filter')">Filters</button>
             <button class="tab-btn" onclick="switchTab('transform')">Transform</button>
+            <button class="tab-btn" onclick="switchTab('blob')">Shape</button>
+            
+            <div class="tab-separator"></div>
+            
+            <!-- Colors & Assets -->
+            <button class="tab-btn" onclick="switchTab('contrast')">Contrast</button>
+            <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
+            <button class="tab-btn" onclick="switchTab('converter')">Converter</button>
+            <button class="tab-btn" onclick="switchTab('placeholder')">Image</button>
           </div>
           <button id="scrollRightBtn" class="scroll-btn" onclick="App.core.scrollTabs(1)" aria-label="Scroll Right">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
