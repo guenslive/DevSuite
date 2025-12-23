@@ -339,7 +339,7 @@ App.core = {
         if (t === "converter") App.converter.update();
         if (t === "blob") { App.shape.switchTool(App.shape.state.tool); App.shape.clipPath.init(); }
         if (t === "filter") App.filter.update();
-        if (t === "flex") App.flex.init();
+        if (t === "flex") App.flex.update();
         if (t === "grid") App.grid.init();
         if (t === "palette") App.palette.init();
     },

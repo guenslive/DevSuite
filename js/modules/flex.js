@@ -26,10 +26,20 @@ App.flex = {
                 const div = document.createElement("div");
                 div.className = "flex-item";
                 div.innerText = num;
-                if (num % 2 === 0) div.style.height = "50px";
-                if (num % 3 === 0) div.style.height = "70px";
+                
+                // Store base dimensions
+                let h = "60px"; // Default from CSS
+                
+                div.dataset.baseHeight = h;
+                div.dataset.baseWidth = "60px";
+                
+                // Apply initially
+                div.style.height = h;
+                
                 container.appendChild(div);
             }
+            // Force update to apply stretch if needed
+            App.flex.update();
         } else if (targetCount < currentCount) {
             const diff = currentCount - targetCount;
             const itemsToRemove = Array.from(visibleItems).slice(-diff);
@@ -46,6 +56,34 @@ App.flex = {
         const container = document.getElementById("flexPreview");
         container.style.display = "flex"; container.style.flexDirection = dir; container.style.flexWrap = wrap;
         container.style.justifyContent = justify; container.style.alignItems = align; container.style.gap = gap + "px";
+        
+        // Handle Stretch Logic
+        const items = container.querySelectorAll('.flex-item');
+        items.forEach(item => {
+            // Ensure base dimensions are stored if missing (for existing items)
+            if (!item.dataset.baseHeight) item.dataset.baseHeight = item.style.height || "60px";
+            if (!item.dataset.baseWidth) item.dataset.baseWidth = item.style.width || "60px";
+
+            const baseH = item.dataset.baseHeight;
+            const baseW = item.dataset.baseWidth;
+
+            if (align === 'stretch') {
+                if (dir.includes('row')) {
+                    // Stretch vertically (cross axis) -> height auto
+                    item.style.height = 'auto';
+                    item.style.width = baseW;
+                } else {
+                    // Stretch horizontally (cross axis) -> width auto
+                    item.style.width = 'auto';
+                    item.style.height = baseH;
+                }
+            } else {
+                // Restore original dimensions
+                item.style.height = baseH;
+                item.style.width = baseW;
+            }
+        });
+
         document.getElementById("flexResult").innerText = `display: flex;\nflex-direction: ${dir};\nflex-wrap: ${wrap};\njustify-content: ${justify};\nalign-items: ${align};\ngap: ${gap}px;`;
     },
 
@@ -114,8 +152,11 @@ App.flex = {
             const div = document.createElement("div");
             div.className = "flex-item";
             div.innerText = num;
-            if (num % 2 === 0) div.style.height = "50px";
-            if (num % 3 === 0) div.style.height = "70px";
+            
+            div.dataset.baseHeight = "60px";
+            div.dataset.baseWidth = "60px";
+            div.style.height = "60px";
+            
             container.appendChild(div);
         }
 
