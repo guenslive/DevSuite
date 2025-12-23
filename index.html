@@ -211,17 +211,15 @@
       <div id="section-ratio" class="tool-section">
         <h2>Aspect Ratio</h2>
         
-        <div class="blob-type-group" style="margin-bottom: 20px;">
-            <button class="blob-type-btn active" id="ratioTabCalc" onclick="App.ratio.switchMode('calc')">1. Calcular Ratio</button>
-            <button class="blob-type-btn" id="ratioTabResize" onclick="App.ratio.switchMode('resize')">2. Calcular Pixeles</button>
+        <div class="preview-container">
+            <div class="ratio-box" id="ratioBox">16:9</div>
         </div>
 
-        <!-- View 1: Calculate Ratio -->
-        <div id="ratioViewCalc">
-            <div class="preview-container">
-            <div class="ratio-box" id="ratioBox">16:9</div>
-            </div>
-            <div class="grid-pair">
+        <div style="text-align: center; margin-bottom: 20px; font-weight: 600; font-size: 1.2rem;" id="ratioResultText">
+            16 : 9
+        </div>
+        
+        <div class="grid-pair">
             <div class="input-group">
                 <label>Ancho (px)</label>
                 <input type="number" id="imgWidth" value="1920" oninput="calcRatio()" />
@@ -230,52 +228,43 @@
                 <label>Alto (px)</label>
                 <input type="number" id="imgHeight" value="1080" oninput="calcRatio()" />
             </div>
+        </div>
+        
+        <h3 style="font-size: 1rem; margin-bottom: 15px; color: var(--text-secondary);">Calculadora de Dimensiones</h3>
+
+        <div class="grid-pair" style="align-items: center; gap: 10px;">
+            <div class="input-group">
+                <label>Ratio Ancho</label>
+                <input type="number" id="ratioInW" value="16" oninput="App.ratio.calcResize('ratio')" />
             </div>
-            <div style="text-align: center; margin-bottom: 20px; font-weight: 600; font-size: 1.2rem;" id="ratioResultText">
-            16 : 9
+            
+            <div class="input-group">
+                <label>Ratio Alto</label>
+                <input type="number" id="ratioInH" value="9" oninput="App.ratio.calcResize('ratio')" />
             </div>
-            <div class="output-box">
+        </div>
+
+        <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin: 20px 0 10px;">
+            Calcula nuevas dimensiones manteniendo el ratio:
+        </p>
+
+        <div class="grid-pair">
+            <div class="input-group">
+                <label>Nuevo Ancho</label>
+                <input type="number" id="resizeW" placeholder="..." oninput="App.ratio.calcResize('width')" />
+            </div>
+            <div class="input-group">
+                <label>Nueva Altura</label>
+                <input type="number" id="resizeH" placeholder="..." oninput="App.ratio.calcResize('height')" />
+            </div>
+        </div>
+
+        <div class="output-box" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                 <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS</span>
                 <button class="copy-btn" onclick="copyText('ratioCssResult', this)">Copiar</button>
             </div>
             <div class="code-result" id="ratioCssResult">aspect-ratio: 16 / 9;</div>
-            </div>
-        </div>
-
-        <!-- View 2: Inverse Calculator -->
-        <div id="ratioViewResize" style="display: none;">
-            <div class="preview-container" style="margin-top: 20px;">
-                <div class="ratio-box" id="resizePreviewBox" style="width: 160px; height: 90px;">16:9</div>
-            </div>
-            
-            <div class="grid-pair" style="align-items: center; gap: 10px;">
-                <div class="input-group">
-                    <label>Ratio Ancho</label>
-                    <input type="number" id="ratioInW" value="16" oninput="App.ratio.calcResize('ratio')" />
-                </div>
-                
-                <div class="input-group">
-                    <label>Ratio Alto</label>
-                    <input type="number" id="ratioInH" value="9" oninput="App.ratio.calcResize('ratio')" />
-                </div>
-            </div>
-
-            <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin: 20px 0 10px;">
-                Escribe en UNO de los dos campos abajo:
-            </p>
-
-            <div class="grid-pair">
-                <div class="input-group">
-                    <label>Si el Ancho es...</label>
-                    <input type="number" id="resizeW" placeholder="Escribe aquí..." oninput="App.ratio.calcResize('width')" />
-                </div>
-                <div class="input-group">
-                    <label>La Altura debe ser...</label>
-                    <input type="number" id="resizeH" placeholder="Escribe aquí..." oninput="App.ratio.calcResize('height')" />
-                </div>
-            </div>
-
         </div>
       </div>
 
@@ -1324,7 +1313,7 @@
     <script src="js/utils/utils.js?v=05d3c2ad"></script>
     <script src="js/core/core.js?v=46467125"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
-    <script src="js/modules/ratio.js?v=4c4030b2"></script>
+    <script src="js/modules/ratio.js?v=1976fcff"></script>
     <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
     <script src="js/modules/shadow.js?v=4748e081"></script>
     <script src="js/modules/contrast.js?v=48375aaf"></script>
