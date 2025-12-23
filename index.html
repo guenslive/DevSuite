@@ -933,6 +933,18 @@
           </div>
           <input type="range" id="fxGap" min="0" max="50" value="16" oninput="App.flex.update()" />
         </div>
+
+        <!-- Favorites Section -->
+        <div style="margin-top: 30px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; font-size: 1rem;">Configuraciones Guardadas</h3>
+                <button class="btn-small" onclick="App.flex.saveFavorite()">+ Guardar Actual</button>
+            </div>
+            <div id="flexFavoritesList" class="favorites-grid">
+                <!-- Favorites will be rendered here -->
+            </div>
+        </div>
+
         <div class="output-box">
           <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
             <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERADO</span>
@@ -1004,6 +1016,17 @@
             </div>
             <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 5px; text-align: center;">
                 * Selecciona un cuadrado azul arriba para editar su posición.
+            </div>
+        </div>
+
+        <!-- Favorites Section -->
+        <div style="margin-top: 30px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; font-size: 1rem;">Configuraciones Guardadas</h3>
+                <button class="btn-small" onclick="App.grid.saveFavorite()">+ Guardar Actual</button>
+            </div>
+            <div id="gridFavoritesList" class="favorites-grid">
+                <!-- Favorites will be rendered here -->
             </div>
         </div>
 
@@ -1296,8 +1319,8 @@
     <script src="js/modules/converter.js?v=5bf46185"></script>
     <script src="js/modules/shape.js?v=1adaa847"></script>
     <script src="js/modules/filter.js?v=789db2dc"></script>
-    <script src="js/modules/flex.js?v=65b518a6"></script>
-    <script src="js/modules/grid.js?v=5c1a57ed"></script>
+    <script src="js/modules/flex.js?v=f2c68723"></script>
+    <script src="js/modules/grid.js?v=5bf7431d"></script>
     <script src="js/modules/palette.js?v=bdc6e6a7"></script>
     <script src="js/modules/transform.js?v=b1a6af0d"></script>
     <script src="js/main.js?v=763b5b67"></script>

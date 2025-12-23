@@ -17,6 +17,7 @@ App.grid = {
 
     init() {
         App.grid.render();
+        this.initFavorites();
     },
 
     setView(view) {
@@ -193,5 +194,112 @@ App.grid = {
         });
         html += `</div>`;
         document.getElementById('gridHtmlResult').innerText = html;
+    },
+
+    /* --- FAVORITES SYSTEM --- */
+    favorites: [],
+    
+    initFavorites() {
+        const stored = localStorage.getItem('gridFavorites');
+        if (stored) {
+            try {
+                this.favorites = JSON.parse(stored);
+            } catch (e) {
+                console.error("Failed to parse grid favorites", e);
+                this.favorites = [];
+            }
+        }
+        this.renderFavorites();
+    },
+
+    async saveFavorite() {
+        const defaultName = "Grid Layout " + (this.favorites.length + 1);
+        const name = await App.core.modal.prompt("Nombre de la configuración", defaultName);
+        if (!name) return;
+
+        // Deep copy of state
+        const config = {
+            name: name,
+            state: JSON.parse(JSON.stringify(this.state))
+        };
+
+        this.favorites.push(config);
+        localStorage.setItem('gridFavorites', JSON.stringify(this.favorites));
+        this.renderFavorites();
+    },
+
+    loadFavorite(index) {
+        const config = this.favorites[index];
+        if (!config) return;
+
+        // Restore state (Deep copy to avoid reference issues)
+        this.state = JSON.parse(JSON.stringify(config.state));
+        
+        // Reset selection
+        this.state.selectedId = null;
+        
+        // Force render and view update
+        this.setView(this.state.currentView);
+    },
+
+    async deleteFavorite(index) {
+        const confirm = await App.core.modal.confirm("¿Eliminar esta configuración?", "Esta acción no se puede deshacer.");
+        if (confirm) {
+            this.favorites.splice(index, 1);
+            localStorage.setItem('gridFavorites', JSON.stringify(this.favorites));
+            this.renderFavorites();
+        }
+    },
+
+    renderFavorites() {
+        const container = document.getElementById("gridFavoritesList");
+        if (!container) return;
+        container.innerHTML = "";
+
+        this.favorites.forEach((fav, index) => {
+            const el = document.createElement("div");
+            el.className = "favorite-item";
+            el.onclick = () => this.loadFavorite(index);
+            
+            // Preview visual
+            const d = fav.state.config.desktop;
+            const previewStyle = `
+                display: grid; 
+                grid-template-columns: repeat(${d.cols}, 1fr); 
+                grid-template-rows: repeat(${d.rows}, 1fr); 
+                gap: 2px; 
+                width: 100%; 
+                height: 100%; 
+                padding: 4px;
+                background: var(--bg-secondary);
+            `;
+            
+            // Mini items for preview
+            let itemsHtml = "";
+            fav.state.items.forEach(item => {
+                const props = item.d;
+                const colStart = props.cStart ? props.cStart : 'auto';
+                const rowStart = props.rStart ? props.rStart : 'auto';
+                const style = `grid-column: ${colStart} / span ${props.cSpan}; grid-row: ${rowStart} / span ${props.rSpan}; background: var(--apple-blue); border-radius: 2px; opacity: 0.7;`;
+                itemsHtml += `<div style="${style}"></div>`;
+            });
+
+            el.innerHTML = `
+                <div class="favorite-preview">
+                    <div style="${previewStyle}">
+                        ${itemsHtml}
+                    </div>
+                </div>
+                <div class="favorite-info">
+                    <span class="favorite-name">${fav.name}</span>
+                    <button class="favorite-delete" onclick="event.stopPropagation(); App.grid.deleteFavorite(${index})">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            container.appendChild(el);
+        });
     }
 };
