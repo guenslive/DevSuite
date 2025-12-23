@@ -67,6 +67,17 @@ App.init = function() {
             results.classList.remove('show');
         }
     });
+
+    // Hide loader
+    const loader = document.getElementById("loader-overlay");
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add("hidden");
+            setTimeout(() => {
+                loader.style.display = "none";
+            }, 500);
+        }, 1000);
+    }
 };
 
 /* --- COMPATIBILITY LAYER FOR HTML HANDLERS --- */

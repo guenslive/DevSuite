@@ -17,10 +17,23 @@
     </script>
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
-    <link rel="stylesheet" href="css/layout.css?v=fbc9a9ff">
+    <link rel="stylesheet" href="css/layout.css?v=f61b5131">
     <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
   </head>
   <body>
+    <div id="loader-overlay">
+      <div class="terminal-loader">
+        <div class="terminal-header">
+          <div class="terminal-title">Status</div>
+          <div class="terminal-controls">
+            <div class="control close"></div>
+            <div class="control minimize"></div>
+            <div class="control maximize"></div>
+          </div>
+        </div>
+        <div class="text">Loading...</div>
+      </div>
+    </div>
     <div class="app-container">
       <div class="header-row">
         <input id="mobileMenuCheckbox" type="checkbox" onchange="App.core.toggleMenu()">
@@ -1323,6 +1336,6 @@
     <script src="js/modules/grid.js?v=5bf7431d"></script>
     <script src="js/modules/palette.js?v=bdc6e6a7"></script>
     <script src="js/modules/transform.js?v=b1a6af0d"></script>
-    <script src="js/main.js?v=763b5b67"></script>
+    <script src="js/main.js?v=82397f3e"></script>
   </body>
 </html>
