@@ -85,7 +85,7 @@ App.utils = {
 
             const el = document.getElementById(id);
             const text = el.tagName === "INPUT" || el.tagName === "TEXTAREA" ? el.value : el.innerText;
-            await navigator.clipboard.writeText(text);
+            await App.utils.copyTextToClipboard(text);
 
             const originalText = btn.getAttribute('data-original-text') || btn.innerText;
             if (!btn.getAttribute('data-original-text')) btn.setAttribute('data-original-text', originalText);
@@ -100,4 +100,18 @@ App.utils = {
             console.error("Copy failed", e);
         }
     },
+    async copyTextToClipboard(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch (e) {
+            console.error("Clipboard API failed", e);
+            // Fallback
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+        }
+    }
 };

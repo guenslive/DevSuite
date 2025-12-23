@@ -156,6 +156,7 @@ App.palette = {
             
             card.onclick = () => {
                 navigator.clipboard.writeText(color);
+                if (App.core.history) App.core.history.add(color);
                 const span = card.querySelector(".hex-code");
                 const oldText = span.innerText;
                 span.innerText = "COPIED!";
