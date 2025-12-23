@@ -46,6 +46,7 @@ App.init = function() {
     });
     App.clamp.calc(); App.ratio.calc(); App.placeholder.draw(); App.shadow.update(); App.contrast.calc();
     App.gradient.init(); App.converter.update(); App.shape.generateBlob(); App.shape.clipPath.init(); App.filter.update(); App.flex.init(); App.palette.init();
+    if (App.shadow.initFavorites) App.shadow.initFavorites();
     
     // Initialize scroll buttons
     App.core.updateScrollButtons();

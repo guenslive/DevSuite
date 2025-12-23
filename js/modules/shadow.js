@@ -245,4 +245,138 @@ App.shadow = {
     updateBg() {
         document.querySelector("#section-shadow .preview-container").style.backgroundColor = document.getElementById("shBgColor").value;
     },
+    
+    /* --- FAVORITES SYSTEM --- */
+    favorites: [],
+    
+    initFavorites() {
+        const stored = localStorage.getItem('shadowFavorites');
+        if (stored) {
+            try {
+                this.favorites = JSON.parse(stored);
+            } catch (e) {
+                console.error("Failed to parse shadow favorites", e);
+                this.favorites = [];
+            }
+        }
+        this.renderFavorites();
+    },
+
+    async saveFavorite() {
+        const defaultName = "Mi Sombra " + (this.favorites.length + 1);
+        const name = await App.core.modal.prompt("Nombre de la configuración", defaultName);
+        if (!name) return;
+
+        const config = {
+            name: name,
+            mode: this.mode,
+            values: [
+                document.getElementById("shCtrl1").value,
+                document.getElementById("shCtrl2").value,
+                document.getElementById("shCtrl3").value,
+                document.getElementById("shCtrl4").value
+            ],
+            colors: {
+                shadow: document.getElementById("shColColor").value,
+                object: document.getElementById("shObjColor").value,
+                bg: document.getElementById("shBgColor").value
+            },
+            extra: {
+                inset: document.getElementById("shInset").checked,
+                neuShape: this.neuShape,
+                glassNoise: document.getElementById("glassNoise") ? document.getElementById("glassNoise").value : 0,
+                glassShine: document.getElementById("glassShine") ? document.getElementById("glassShine").checked : false
+            },
+            layers: JSON.parse(JSON.stringify(this.layers)) // Deep copy
+        };
+
+        this.favorites.push(config);
+        localStorage.setItem('shadowFavorites', JSON.stringify(this.favorites));
+        this.renderFavorites();
+    },
+
+    loadFavorite(index) {
+        const config = this.favorites[index];
+        if (!config) return;
+
+        // Set Mode
+        this.setMode(config.mode);
+
+        // Restore Values
+        document.getElementById("shCtrl1").value = config.values[0];
+        document.getElementById("shCtrl2").value = config.values[1];
+        document.getElementById("shCtrl3").value = config.values[2];
+        document.getElementById("shCtrl4").value = config.values[3];
+
+        // Restore Colors
+        App.syncProPicker("shCol", config.colors.shadow);
+        App.syncProPicker("shObj", config.colors.object);
+        App.syncProPicker("shBg", config.colors.bg);
+
+        // Restore Extras
+        if (document.getElementById("shInset")) document.getElementById("shInset").checked = config.extra.inset;
+        if (config.mode === 'neu' && config.extra.neuShape) this.setNeuShape(config.extra.neuShape);
+        if (config.mode === 'glass') {
+            if (document.getElementById("glassNoise")) document.getElementById("glassNoise").value = config.extra.glassNoise;
+            if (document.getElementById("glassShine")) document.getElementById("glassShine").checked = config.extra.glassShine;
+        }
+
+        // Restore Layers if multiple
+        if (config.mode === 'multiple' && config.layers) {
+            this.layers = JSON.parse(JSON.stringify(config.layers));
+            this.activeLayerIndex = 0;
+            this.renderLayers();
+            this.loadLayerValues(); // This might overwrite the slider values we just set, which is correct for multiple mode
+        }
+
+        this.update();
+        this.updateBg();
+    },
+
+    async deleteFavorite(index) {
+        const confirmed = await App.core.modal.confirm("Eliminar Configuración", "¿Estás seguro de que quieres eliminar esta sombra guardada?");
+        if (confirmed) {
+            this.favorites.splice(index, 1);
+            localStorage.setItem('shadowFavorites', JSON.stringify(this.favorites));
+            this.renderFavorites();
+        }
+    },
+
+    renderFavorites() {
+        const container = document.getElementById("shadowFavoritesList");
+        if (!container) return;
+
+        if (this.favorites.length === 0) {
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); font-size: 0.9rem; padding: 20px;">No hay configuraciones guardadas.</div>`;
+            return;
+        }
+
+        container.innerHTML = this.favorites.map((fav, index) => {
+            // Generate a mini preview style
+            let previewStyle = "";
+            if (fav.mode === 'smooth' || fav.mode === 'neu') {
+                previewStyle = `background-color: ${fav.colors.object}; box-shadow: 0 2px 5px rgba(0,0,0,0.2);`; 
+                // Note: Generating the full shadow CSS for preview is complex, so we use a simple placeholder or try to approximate
+                // Let's just show the object color
+            } else if (fav.mode === 'glass') {
+                previewStyle = `background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5);`;
+            } else {
+                previewStyle = `background-color: ${fav.colors.object};`;
+            }
+
+            return `
+            <div class="favorite-item" onclick="App.shadow.loadFavorite(${index})">
+                <div class="favorite-preview">
+                    <div class="favorite-preview-inner" style="${previewStyle}"></div>
+                </div>
+                <div class="favorite-info">
+                    <span class="favorite-name">${fav.name}</span>
+                    <button class="favorite-delete" onclick="event.stopPropagation(); App.shadow.deleteFavorite(${index})">
+                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            </div>
+            `;
+        }).join('');
+    }
 };

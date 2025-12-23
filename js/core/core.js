@@ -210,6 +210,71 @@ App.core = {
             }
         }
     },
+    modal: {
+        resolve: null,
+        reject: null,
+        
+        show(title, bodyContent, confirmText = 'Confirmar', cancelText = 'Cancelar') {
+            return new Promise((resolve, reject) => {
+                this.resolve = resolve;
+                this.reject = reject;
+                
+                document.getElementById('modalTitle').innerText = title;
+                document.getElementById('modalBody').innerHTML = bodyContent;
+                document.getElementById('modalConfirmBtn').innerText = confirmText;
+                document.getElementById('modalCancelBtn').innerText = cancelText;
+                
+                const modal = document.getElementById('appModal');
+                modal.classList.add('show');
+                
+                // Focus input if exists
+                const input = modal.querySelector('input');
+                if (input) setTimeout(() => input.focus(), 100);
+                
+                // Bind events
+                document.getElementById('modalConfirmBtn').onclick = () => this.close(true);
+                document.getElementById('modalCancelBtn').onclick = () => this.close(false);
+                
+                // Close on click outside
+                modal.onclick = (e) => {
+                    if (e.target === modal) this.close(false);
+                };
+
+                // Handle Enter key in input
+                if (input) {
+                    input.onkeydown = (e) => {
+                        if (e.key === 'Enter') this.close(true);
+                        if (e.key === 'Escape') this.close(false);
+                    };
+                }
+            });
+        },
+        
+        close(confirmed) {
+            const modal = document.getElementById('appModal');
+            modal.classList.remove('show');
+            
+            if (confirmed) {
+                const input = modal.querySelector('input');
+                const value = input ? input.value : true;
+                if (this.resolve) this.resolve(value);
+            } else {
+                if (this.resolve) this.resolve(null); // Resolve with null instead of reject for easier handling
+            }
+            
+            this.resolve = null;
+            this.reject = null;
+        },
+        
+        async prompt(title, defaultValue = '') {
+            const content = `<input type="text" class="modal-input" value="${defaultValue}" placeholder="Escribe un nombre...">`;
+            return await this.show(title, content, 'Guardar', 'Cancelar');
+        },
+        
+        async confirm(title, message) {
+            return await this.show(title, message, 'Sí, Eliminar', 'Cancelar');
+        }
+    },
     scrollTabs(direction) {
         const container = document.querySelector(".tabs-container");
         if (!container) return;

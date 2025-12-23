@@ -17,7 +17,7 @@
     </script>
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
-    <link rel="stylesheet" href="css/layout.css?v=1c34bef5">
+    <link rel="stylesheet" href="css/layout.css?v=fbc9a9ff">
     <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
   </head>
   <body>
@@ -471,6 +471,19 @@
             <button class="copy-btn" onclick="copyText('shadowResult', this)">Copiar</button>
           </div>
           <div class="code-result" id="shadowResult"></div>
+        </div>
+
+        <div class="favorites-section" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; font-size: 1rem;">Configuraciones Guardadas</h3>
+                <button class="btn-small" onclick="App.shadow.saveFavorite()">+ Guardar Actual</button>
+            </div>
+            <div id="shadowFavoritesList" class="favorites-grid">
+                <!-- Populated by JS -->
+                <div style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); font-size: 0.9rem; padding: 20px;">
+                    No hay configuraciones guardadas.
+                </div>
+            </div>
         </div>
       </div>
 
@@ -1259,13 +1272,25 @@
       </div>
     </div>
 
+    <!-- Custom Modal -->
+    <div id="appModal" class="modal-overlay">
+      <div class="modal-content">
+        <h3 id="modalTitle" class="modal-title">Title</h3>
+        <div id="modalBody" class="modal-body"></div>
+        <div class="modal-actions">
+          <button id="modalCancelBtn" class="btn-secondary">Cancel</button>
+          <button id="modalConfirmBtn" class="btn-primary">Confirm</button>
+        </div>
+      </div>
+    </div>
+
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=05d3c2ad"></script>
-    <script src="js/core/core.js?v=b4bb4f81"></script>
+    <script src="js/core/core.js?v=4f405e63"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=4c4030b2"></script>
     <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
-    <script src="js/modules/shadow.js?v=0dcb215a"></script>
+    <script src="js/modules/shadow.js?v=4748e081"></script>
     <script src="js/modules/contrast.js?v=48375aaf"></script>
     <script src="js/modules/gradient.js?v=f4769657"></script>
     <script src="js/modules/converter.js?v=5bf46185"></script>
@@ -1275,6 +1300,6 @@
     <script src="js/modules/grid.js?v=5c1a57ed"></script>
     <script src="js/modules/palette.js?v=bdc6e6a7"></script>
     <script src="js/modules/transform.js?v=b1a6af0d"></script>
-    <script src="js/main.js?v=0b5273e8"></script>
+    <script src="js/main.js?v=763b5b67"></script>
   </body>
 </html>
