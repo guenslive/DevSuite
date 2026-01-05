@@ -41,7 +41,8 @@ App.core = {
         { id: 'contrast', name: 'Contrast', desc: 'Color contrast checker' },
         { id: 'palette', name: 'Palette', desc: 'Color palette generator' },
         { id: 'converter', name: 'Converter', desc: 'Unit and color converter' },
-        { id: 'placeholder', name: 'Image', desc: 'Placeholder image generator' }
+        { id: 'placeholder', name: 'Image', desc: 'Placeholder image generator' },
+        { id: 'metatags', name: 'Meta Tags', desc: 'SEO and Social Media tag generator' }
     ],
     searchState: {
         selectedIndex: -1,
@@ -342,5 +343,6 @@ App.core = {
         if (t === "flex") App.flex.update();
         if (t === "grid") App.grid.init();
         if (t === "palette") App.palette.init();
+        if (t === "metatags") App.metatags.update();
     },
 };

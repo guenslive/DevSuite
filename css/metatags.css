@@ -1,0 +1,51 @@
+
+/* Controls Panel for forms */
+.controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* More breathing room */
+}
+
+/* Specific Metatags Styling */
+#section-metatags textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 12px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#section-metatags textarea:focus {
+  background-color: var(--input-focus-bg);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+  border-color: var(--apple-blue);
+}
+
+#section-metatags .preview-box {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+#section-metatags .preview-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+}
+
+#section-metatags h4 {
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

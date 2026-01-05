@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
     <link rel="stylesheet" href="css/layout.css?v=f61b5131">
     <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
+    <link rel="stylesheet" href="css/metatags.css?v=1">
   </head>
   <body>
     <div id="loader-overlay">
@@ -76,6 +77,11 @@
             <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
             <button class="tab-btn" onclick="switchTab('converter')">Converter</button>
             <button class="tab-btn" onclick="switchTab('placeholder')">Image</button>
+
+            <div class="tab-separator"></div>
+
+            <!-- Utils -->
+            <button class="tab-btn" onclick="switchTab('metatags')">Meta Tags</button>
           </div>
           <button id="scrollRightBtn" class="scroll-btn" onclick="App.core.scrollTabs(1)" aria-label="Scroll Right">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -1295,6 +1301,79 @@
           <div class="code-result" id="transformResult"></div>
         </div>
       </div>
+
+        <!-- Meta Tags Tool -->
+    <div id="section-metatags" class="tool-section">
+      <h2>Meta Tags Generator</h2>
+      <div class="controls-panel">
+        <div class="input-group">
+          <label>Page Title</label>
+          <input type="text" id="metaTitle" placeholder="My Awesome Website" oninput="App.metatags.update()">
+        </div>
+        <div class="input-group">
+          <label>Description (approx 150-160 chars)</label>
+          <textarea id="metaDesc" rows="3" placeholder="A brief description of the content..." oninput="App.metatags.update()"></textarea>
+        </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Website URL</label>
+            <input type="text" id="metaUrl" placeholder="https://..." oninput="App.metatags.update()">
+          </div>
+          <div class="input-group">
+            <label>Author / Site Name</label>
+            <input type="text" id="metaAuthor" placeholder="@username" oninput="App.metatags.update()">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Image URL (OG/Twitter) - 1200x630 recommended</label>
+          <input type="text" id="metaImage" placeholder="https://..." oninput="App.metatags.update()">
+        </div>
+        <div class="grid-pair">
+           <div class="input-group">
+              <label>Keywords (comma separated)</label>
+              <input type="text" id="metaKeywords" placeholder="html, css, tools" oninput="App.metatags.update()">
+           </div>
+           <div class="input-group">
+              <label>Theme Color</label>
+              <input type="color" id="metaThemeColor" value="#007aff" oninput="App.metatags.update()" style="height: 40px; padding: 2px;">
+           </div>
+        </div>
+
+        <div class="output-box" style="margin-top:20px">
+           <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+             <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">GENERATED CODE</span>
+             <button class="copy-btn" onclick="App.metatags.copy()">Copiar</button>
+           </div>
+           <div class="code-result" id="metatagsResult" style="white-space: pre-wrap; font-family: monospace; font-size: 13px;"></div>
+         </div>
+      </div>
+
+      <div class="preview-panel" style="margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+          <h3 style="margin-bottom: 15px; font-size: 1.1rem;">Preview</h3>
+          
+          <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">Google Search</h4>
+          <div id="googlePreview" class="preview-box" style="background:var(--bg-secondary); padding: 15px; border-radius: 8px; font-family: arial, sans-serif; margin-bottom: 25px;">
+             <div style="display:flex; align-items:center; gap:10px; margin-bottom: 6px;"> 
+                <div style="width:28px; height:28px; background:#ddd; border-radius:50%"></div>
+                <div style="font-size:12px; color:var(--text-secondary)">
+                   <div id="googleUrlPreview" style="color:var(--text-primary)">example.com</div>
+                </div>
+             </div>
+             <div id="googleTitlePreview" style="color: #8ab4f8; font-size: 20px; margin-bottom: 4px; cursor: pointer; text-decoration: underline;">Example Title</div>
+             <div id="googleDescPreview" style="color:var(--text-secondary); font-size: 14px; line-height: 1.5;">Example description text goes here...</div>
+          </div>
+
+          <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">Social Share (Facebook/OG)</h4>
+          <div id="socialPreview" class="preview-box" style="background:var(--bg-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); max-width: 500px;">
+              <div id="ogImagePreview" style="width: 100%; height: 260px; background-color: #222; background-size: cover; background-position: center; display:none; justify-content:center; align-items:center; color: #555;">No Image</div>
+              <div style="padding: 12px;">
+                 <div id="ogSitePreview" style="text-transform: uppercase; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">EXAMPLE.COM</div>
+                 <div id="ogTitlePreview" style="font-weight: bold; font-size: 16px; margin-bottom: 4px; color: var(--text-primary);">Example Title</div>
+                 <div id="ogDescPreview" style="font-size: 14px; color: var(--text-secondary); line-height: 1.4;">Example description text goes here...</div>
+              </div>
+          </div>
+      </div>
+    </div>
     </div>
 
     <!-- Custom Modal -->
@@ -1324,6 +1403,7 @@
     <script src="js/modules/flex.js?v=174bdb41"></script>
     <script src="js/modules/grid.js?v=5bf7431d"></script>
     <script src="js/modules/palette.js?v=bdc6e6a7"></script>
+    <script src="js/modules/metatags.js?v=12345678"></script>
     <script src="js/modules/transform.js?v=b1a6af0d"></script>
     <script src="js/main.js?v=82397f3e"></script>
   </body>
