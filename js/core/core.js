@@ -5,15 +5,14 @@ App.core = {
         App.state.theme = s;
         App.core.updateIcons(s);
     },
-    toggleTheme() {
+    toggleTheme(e) {
         let n;
-        // Check if triggered by the checkbox change event
-        if (event && event.target && event.target.id === "themeSwitchInput") {
-            n = event.target.checked ? "dark" : "light";
+        if (e && e.target && e.target.id === "themeSwitchInput") {
+            n = e.target.checked ? "dark" : "light";
         } else {
             n = App.state.theme === "dark" ? "light" : "dark";
         }
-        
+
         App.state.theme = n;
         document.documentElement.setAttribute("data-theme", n);
         localStorage.setItem("theme", n);
@@ -50,28 +49,33 @@ App.core = {
     },
     handleSearch(query) {
         const resultsContainer = document.getElementById('searchResults');
+        const searchInput = document.getElementById('toolSearch');
         const q = query.toLowerCase().trim();
-        
+
         App.core.searchState.selectedIndex = -1;
-        
+
         if (q.length === 0) {
             resultsContainer.classList.remove('show');
             resultsContainer.innerHTML = '';
             App.core.searchState.results = [];
+            if (searchInput) {
+                searchInput.setAttribute('aria-expanded', 'false');
+                searchInput.removeAttribute('aria-activedescendant');
+            }
             return;
         }
 
-        const matches = App.core.toolsList.filter(tool => 
-            tool.name.toLowerCase().includes(q) || 
+        const matches = App.core.toolsList.filter(tool =>
+            tool.name.toLowerCase().includes(q) ||
             tool.desc.toLowerCase().includes(q) ||
             tool.id.toLowerCase().includes(q)
         );
-        
+
         App.core.searchState.results = matches;
 
         if (matches.length > 0) {
             resultsContainer.innerHTML = matches.map((tool, index) => `
-                <div class="search-result-item" id="search-result-${index}" onclick="App.core.selectTool('${tool.id}')">
+                <div class="search-result-item" role="option" aria-selected="false" id="search-result-${index}" onclick="App.core.selectTool('${tool.id}')">
                     <div class="search-result-text">
                         <span class="search-result-name">${tool.name}</span>
                         <span class="search-result-desc">${tool.desc}</span>
@@ -79,8 +83,13 @@ App.core = {
                 </div>
             `).join('');
             resultsContainer.classList.add('show');
+            if (searchInput) {
+                searchInput.setAttribute('aria-expanded', 'true');
+                searchInput.removeAttribute('aria-activedescendant');
+            }
         } else {
             resultsContainer.classList.remove('show');
+            if (searchInput) searchInput.setAttribute('aria-expanded', 'false');
         }
     },
     handleSearchKeydown(e) {
@@ -111,22 +120,32 @@ App.core = {
     updateSearchSelection() {
         const index = App.core.searchState.selectedIndex;
         const items = document.querySelectorAll('.search-result-item');
+        const searchInput = document.getElementById('toolSearch');
         items.forEach((item, i) => {
-            if (i === index) {
-                item.classList.add('selected');
-                item.scrollIntoView({ block: 'nearest' });
-            } else {
-                item.classList.remove('selected');
-            }
+            const selected = i === index;
+            item.classList.toggle('selected', selected);
+            item.setAttribute('aria-selected', selected ? 'true' : 'false');
+            if (selected) item.scrollIntoView({ block: 'nearest' });
         });
+        if (searchInput) {
+            if (index >= 0) {
+                searchInput.setAttribute('aria-activedescendant', `search-result-${index}`);
+            } else {
+                searchInput.removeAttribute('aria-activedescendant');
+            }
+        }
     },
     selectTool(id) {
         App.core.switchTab(id);
-        document.getElementById('toolSearch').value = '';
+        const searchInput = document.getElementById('toolSearch');
+        if (searchInput) {
+            searchInput.value = '';
+            searchInput.setAttribute('aria-expanded', 'false');
+            searchInput.removeAttribute('aria-activedescendant');
+        }
         document.getElementById('searchResults').classList.remove('show');
-        
-        // Scroll to tab
-        const tabBtn = document.querySelector(`.tab-btn[onclick="switchTab('${id}')"]`);
+
+        const tabBtn = document.getElementById('tab-' + id);
         if (tabBtn) {
             tabBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
@@ -319,9 +338,22 @@ App.core = {
             checkbox.checked = (t === "dark");
         }
     },
-    switchTab(t) {
-        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
-        if (event && event.target && event.target.classList.contains("tab-btn")) event.target.classList.add("active");
+    switchTab(t, e) {
+        document.querySelectorAll(".tab-btn").forEach((b) => {
+            b.classList.remove("active");
+            b.setAttribute("aria-selected", "false");
+            b.setAttribute("tabindex", "-1");
+        });
+        const activeTab = document.getElementById("tab-" + t);
+        if (activeTab) {
+            activeTab.classList.add("active");
+            activeTab.setAttribute("aria-selected", "true");
+            activeTab.setAttribute("tabindex", "0");
+        } else if (e && e.target && e.target.classList.contains("tab-btn")) {
+            e.target.classList.add("active");
+            e.target.setAttribute("aria-selected", "true");
+            e.target.setAttribute("tabindex", "0");
+        }
         document.querySelectorAll(".tool-section").forEach((s) => s.classList.remove("active"));
         document.getElementById("section-" + t).classList.add("active");
 
