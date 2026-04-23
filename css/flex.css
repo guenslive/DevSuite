@@ -1,0 +1,70 @@
+/* --- FLEXBOX TOOL STYLES (ANIMATED) --- */
+.flex-preview-box {
+  width: 100%;
+  height: 300px;
+  background-color: var(--input-bg);
+  border: 1px dashed var(--text-secondary);
+  border-radius: 16px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 10px;
+}
+
+@keyframes itemPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.flex-item {
+  width: 60px;
+  height: 60px;
+  background: var(--apple-blue);
+  color: white;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: itemPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+}
+
+.flex-item.removing {
+    opacity: 0;
+    transform: scale(0);
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    border: none;
+    overflow: hidden;
+}
+
+.flex-item:hover {
+  transform: translateY(-5px) scale(1.1) rotate(3deg);
+  box-shadow: 0 12px 20px rgba(0, 122, 255, 0.3);
+  z-index: 10;
+  background: #0063ce;
+}
+
+.flex-item:nth-child(2n) { background: #34c759; }
+.flex-item:nth-child(2n):hover { background: #248a3d; box-shadow: 0 12px 20px rgba(52, 199, 89, 0.3); }
+.flex-item:nth-child(3n) { background: #ff9500; }
+.flex-item:nth-child(3n):hover { background: #cc7700; box-shadow: 0 12px 20px rgba(255, 149, 0, 0.3); }
+.flex-item:nth-child(4n) { background: #ff3b30; }
+.flex-item:nth-child(5n) { background: #5856d6; }

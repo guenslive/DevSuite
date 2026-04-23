@@ -1,0 +1,151 @@
+/* --- INTERACTIVE GRADIENT BAR --- */
+.grad-bar-wrapper {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+.grad-bar-visual {
+  width: 100%;
+  height: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  cursor: crosshair;
+  background: var(--checker-pattern);
+}
+.grad-bar-overlay {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.grad-thumb {
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  z-index: 10;
+  transition: box-shadow 0.1s;
+  touch-action: none;
+  background: var(--checker-pattern);
+}
+.grad-thumb::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--thumb-color, #000);
+}
+.grad-thumb:active {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(1.1);
+  z-index: 20;
+}
+
+/* --- STOPS LIST --- */
+.stops-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.stop-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 70px 40px;
+  grid-template-areas: "color opacity pos del";
+  gap: 15px;
+  align-items: center;
+  background: var(--card-bg);
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  animation: fadeInRow 0.3s ease;
+}
+.stop-opacity-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  grid-area: opacity;
+}
+.stop-opacity-input {
+  height: 6px !important;
+  margin: 8px 0 !important;
+}
+.stop-opacity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.stop-pos-input {
+  text-align: center;
+  padding: 8px !important;
+  font-size: 0.85rem !important;
+  grid-area: pos;
+}
+.btn-del-stop {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--fail-color);
+  width: 100%;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+  grid-area: del;
+}
+.btn-del-stop:hover {
+  background: rgba(255, 59, 48, 0.2);
+}
+.btn-add-stop {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed var(--text-secondary);
+  background: transparent;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s;
+  opacity: 0.7;
+}
+.btn-add-stop:hover {
+  opacity: 1;
+  border-color: var(--apple-blue);
+  color: var(--apple-blue);
+  background: rgba(0, 122, 255, 0.05);
+}
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
