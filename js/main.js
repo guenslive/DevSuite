@@ -1,36 +1,39 @@
+App._syncHandlers = [
+    { match: (p) => p.startsWith("ph"),   run: () => App.placeholder.update(false) },
+    { match: (p) => p.startsWith("sh"),   run: () => { App.shadow.update(); App.shadow.updateBg(); } },
+    { match: (p) => p === "fg" || p === "bg", run: () => App.contrast.calc() },
+    { match: (p) => p === "conv",         run: () => App.converter.update() },
+    { match: (p) => p.startsWith("blob"), run: () => App.shape.generateBlob() },
+    { match: (p) => p.startsWith("tri"),  run: () => App.shape.generateTriangle() },
+    { match: (p) => p === "pal",          run: (v) => App.palette.updateBaseColor(v) },
+];
+
 App.syncProPicker = function(prefix, value) {
     if (!value.startsWith("#")) value = "#" + value;
     const isValid = /^#[0-9A-F]{6}$/i.test(value);
     const colorInput = document.getElementById(prefix + "Color");
     const textInput = document.getElementById(prefix + "Text");
     const box = document.getElementById(prefix + "Box");
-    if (isValid) {
-        if (colorInput) colorInput.value = value;
-        if (textInput) textInput.value = value.toUpperCase();
-        if (box) box.style.background = value;
-        if (prefix.startsWith("ph")) App.placeholder.update(false);
-        if (prefix.startsWith("sh")) { App.shadow.update(); App.shadow.updateBg(); }
-        if (prefix === "fg" || prefix === "bg") App.contrast.calc();
-        if (prefix === "conv") App.converter.update();
-        if (prefix.startsWith("blob")) App.shape.generateBlob();
-        if (prefix.startsWith("tri")) App.shape.generateTriangle();
-        if (prefix === "pal") App.palette.updateBaseColor(value);
-        
-        // Add to history (debounce slightly to avoid adding every step of dragging)
-        if (App.core.history) {
-            clearTimeout(App.state.historyDebounce);
-            App.state.historyDebounce = setTimeout(() => {
-                App.core.history.add(value);
-            }, 1000);
-        }
-    } else {
+
+    if (!isValid) {
         if (textInput) textInput.value = value;
+        return;
+    }
+
+    if (colorInput) colorInput.value = value;
+    if (textInput) textInput.value = value.toUpperCase();
+    if (box) box.style.background = value;
+
+    const handler = App._syncHandlers.find((h) => h.match(prefix));
+    if (handler) handler.run(value);
+
+    if (App.core.history) {
+        clearTimeout(App.state.historyDebounce);
+        App.state.historyDebounce = setTimeout(() => App.core.history.add(value), 1000);
     }
 };
 
-App.init = function() {
-    App.core.initTheme();
-    if (App.core.history) App.core.history.init();
+App._initPalettePresets = function() {
     const presets = ["#007AFF", "#34C759", "#FF3B30", "#FF9500", "#AF52DE", "#5856D6", "#5AC8FA", "#000000", "#FFFFFF"];
     ["phBg", "fg", "bg"].forEach((prefix) => {
         const container = document.getElementById(prefix + "Palette");
@@ -44,40 +47,59 @@ App.init = function() {
             container.appendChild(swatch);
         });
     });
-    App.clamp.calc(); App.ratio.calc(); App.placeholder.draw(); App.shadow.update(); App.contrast.calc();
-    App.gradient.init(); App.converter.update(); App.shape.generateBlob(); App.shape.clipPath.init(); App.filter.update(); App.flex.init(); App.palette.init();
+};
+
+App._initAllTools = function() {
+    App.clamp.calc();
+    App.ratio.calc();
+    App.placeholder.draw();
+    App.shadow.update();
+    App.contrast.calc();
+    App.gradient.init();
+    App.converter.update();
+    App.shape.generateBlob();
+    App.shape.clipPath.init();
+    App.filter.update();
+    App.flex.init();
+    App.palette.init();
     if (App.shadow.initFavorites) App.shadow.initFavorites();
-    
-    // Initialize scroll buttons
+};
+
+App._initScrollButtons = function() {
     App.core.updateScrollButtons();
     const tabsContainer = document.querySelector(".tabs-container");
-    if (tabsContainer) {
-        tabsContainer.addEventListener("scroll", () => {
-            // Debounce slightly or just call directly
-            App.core.updateScrollButtons();
-        });
-        window.addEventListener("resize", App.core.updateScrollButtons);
-    }
+    if (!tabsContainer) return;
+    tabsContainer.addEventListener("scroll", () => App.core.updateScrollButtons());
+    window.addEventListener("resize", App.core.updateScrollButtons);
+};
 
-    // Close search results on click outside
-    document.addEventListener('click', (e) => {
-        const searchWrapper = document.querySelector('.search-wrapper');
-        const results = document.getElementById('searchResults');
+App._initSearchDismiss = function() {
+    document.addEventListener("click", (e) => {
+        const searchWrapper = document.querySelector(".search-wrapper");
+        const results = document.getElementById("searchResults");
         if (searchWrapper && !searchWrapper.contains(e.target) && results) {
-            results.classList.remove('show');
+            results.classList.remove("show");
         }
     });
+};
 
-    // Hide loader
+App._hideLoader = function() {
     const loader = document.getElementById("loader-overlay");
-    if (loader) {
-        setTimeout(() => {
-            loader.classList.add("hidden");
-            setTimeout(() => {
-                loader.style.display = "none";
-            }, 500);
-        }, 1000);
-    }
+    if (!loader) return;
+    setTimeout(() => {
+        loader.classList.add("hidden");
+        setTimeout(() => { loader.style.display = "none"; }, 500);
+    }, 1000);
+};
+
+App.init = function() {
+    App.core.initTheme();
+    if (App.core.history) App.core.history.init();
+    App._initPalettePresets();
+    App._initAllTools();
+    App._initScrollButtons();
+    App._initSearchDismiss();
+    App._hideLoader();
 };
 
 /* --- COMPATIBILITY LAYER FOR HTML HANDLERS --- */
@@ -100,10 +122,8 @@ window.updateBlobSize = App.shape.updateBlobSize;
 window.setBlobType = App.shape.setBlobType;
 window.syncProPicker = App.syncProPicker;
 
-// FIX #7: Map App to window for strict HTML event handlers like oninput="App.shadow.update()"
 window.App = App;
 
-// Initialize App when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     App.init();
 });
