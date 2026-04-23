@@ -41,7 +41,11 @@ App.core = {
         { id: 'palette', name: 'Palette', desc: 'Color palette generator' },
         { id: 'converter', name: 'Converter', desc: 'Unit and color converter' },
         { id: 'placeholder', name: 'Image', desc: 'Placeholder image generator' },
-        { id: 'metatags', name: 'Meta Tags', desc: 'SEO and Social Media tag generator' }
+        { id: 'metatags', name: 'Meta Tags', desc: 'SEO and Social Media tag generator' },
+        { id: 'keyframes', name: 'Animation', desc: 'CSS @keyframes animation generator' },
+        { id: 'typescale', name: 'Type Scale', desc: 'Modular typography scale generator' },
+        { id: 'borderradius', name: 'Border Radius', desc: 'Border radius with elliptical corners' },
+        { id: 'scrollbar', name: 'Scrollbar', desc: 'Custom webkit scrollbar styler' }
     ],
     searchState: {
         selectedIndex: -1,
@@ -376,5 +380,9 @@ App.core = {
         if (t === "grid") App.grid.init();
         if (t === "palette") App.palette.init();
         if (t === "metatags") App.metatags.update();
+        if (t === "keyframes") App.keyframes.init();
+        if (t === "typescale") App.typescale.update();
+        if (t === "borderradius") App.borderradius.update();
+        if (t === "scrollbar") App.scrollbar.update();
     },
 };

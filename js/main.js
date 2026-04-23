@@ -1,5 +1,6 @@
 App._syncHandlers = [
     { match: (p) => p.startsWith("ph"),   run: () => App.placeholder.update(false) },
+    { match: (p) => p.startsWith("sb"),   run: () => App.scrollbar.update() },
     { match: (p) => p.startsWith("sh"),   run: () => { App.shadow.update(); App.shadow.updateBg(); } },
     { match: (p) => p === "fg" || p === "bg", run: () => App.contrast.calc() },
     { match: (p) => p === "conv",         run: () => App.converter.update() },
@@ -63,6 +64,10 @@ App._initAllTools = function() {
     App.flex.init();
     App.palette.init();
     if (App.shadow.initFavorites) App.shadow.initFavorites();
+    if (App.keyframes && App.keyframes.init) App.keyframes.init();
+    if (App.typescale && App.typescale.update) App.typescale.update();
+    if (App.borderradius && App.borderradius.update) App.borderradius.update();
+    if (App.scrollbar && App.scrollbar.update) App.scrollbar.update();
 };
 
 App._initScrollButtons = function() {
