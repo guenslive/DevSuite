@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
     <link rel="stylesheet" href="css/layout.css?v=1f72fe19">
-    <link rel="stylesheet" href="css/tools.css?v=2e50bb42">
+    <link rel="stylesheet" href="css/tools.css?v=ecf2eac0">
     <link rel="stylesheet" href="css/blob.css?v=83abcc8e">
     <link rel="stylesheet" href="css/gradient.css?v=048e66f3">
     <link rel="stylesheet" href="css/contrast.css?v=32e136c6">
@@ -89,6 +89,10 @@
 
             <!-- Utils -->
             <button class="tab-btn" id="tab-metatags" role="tab" aria-selected="false" aria-controls="section-metatags" tabindex="-1" onclick="switchTab('metatags', event)">Meta Tags</button>
+            <button class="tab-btn" id="tab-keyframes" role="tab" aria-selected="false" aria-controls="section-keyframes" tabindex="-1" onclick="switchTab('keyframes', event)">Animation</button>
+            <button class="tab-btn" id="tab-typescale" role="tab" aria-selected="false" aria-controls="section-typescale" tabindex="-1" onclick="switchTab('typescale', event)">Type Scale</button>
+            <button class="tab-btn" id="tab-borderradius" role="tab" aria-selected="false" aria-controls="section-borderradius" tabindex="-1" onclick="switchTab('borderradius', event)">Border Radius</button>
+            <button class="tab-btn" id="tab-scrollbar" role="tab" aria-selected="false" aria-controls="section-scrollbar" tabindex="-1" onclick="switchTab('scrollbar', event)">Scrollbar</button>
           </div>
           <button id="scrollRightBtn" class="scroll-btn" onclick="App.core.scrollTabs(1)" aria-label="Scroll Right">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -365,9 +369,25 @@
         </div>
         
         <div id="shadowLayersControl" style="display: none; margin-bottom: 20px;">
-          <div class="label-row" style="margin-bottom: 10px; align-items: center;">
+          <label style="display:block; margin-bottom: 8px;">Presets de Composición</label>
+          <div class="multiple-preset-row" id="shMultiplePresetsRow">
+            <button class="multiple-preset-btn" id="mulPreset-ios-card"       onclick="App.shadow.applyMultiplePreset('ios-card')">iOS Card</button>
+            <button class="multiple-preset-btn" id="mulPreset-material-24"    onclick="App.shadow.applyMultiplePreset('material-24')">Material 24dp</button>
+            <button class="multiple-preset-btn" id="mulPreset-neon-cyan"      onclick="App.shadow.applyMultiplePreset('neon-cyan')">Neon Glow</button>
+            <button class="multiple-preset-btn" id="mulPreset-bloom"          onclick="App.shadow.applyMultiplePreset('bloom')">Bloom</button>
+            <button class="multiple-preset-btn" id="mulPreset-long-flat"      onclick="App.shadow.applyMultiplePreset('long-flat')">Long Flat</button>
+            <button class="multiple-preset-btn" id="mulPreset-sticker"        onclick="App.shadow.applyMultiplePreset('sticker')">Sticker</button>
+            <button class="multiple-preset-btn" id="mulPreset-double-inset"   onclick="App.shadow.applyMultiplePreset('double-inset')">Double Inset</button>
+            <button class="multiple-preset-btn" id="mulPreset-beveled"        onclick="App.shadow.applyMultiplePreset('beveled')">Beveled</button>
+          </div>
+
+          <div class="label-row" style="margin: 14px 0 10px 0; align-items: center;">
             <label style="margin:0">Capas de Sombra</label>
-            <button class="btn-small" style="padding: 6px 12px; font-size: 0.7rem;" onclick="App.shadow.addLayer()">+ Añadir Capa</button>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-small" style="padding: 6px 10px; font-size: 0.7rem;" onclick="App.shadow.randomizeMultiple()" title="Aleatorio">🎲 Random</button>
+              <button class="btn-small" style="padding: 6px 10px; font-size: 0.7rem;" onclick="App.shadow.clearLayers()" title="Limpiar">Reset</button>
+              <button class="btn-small" style="padding: 6px 12px; font-size: 0.7rem;" onclick="App.shadow.addLayer()">+ Añadir</button>
+            </div>
           </div>
           <div id="shadowLayersList" class="stops-list"></div>
         </div>
@@ -407,7 +427,7 @@
         </div>
 
         <div class="grid-triple">
-          <div class="input-group">
+          <div class="input-group" id="shShadowColorGroup">
             <label id="lblColorShadow">Color Sombra</label>
             <div class="pro-color-picker">
               <div class="color-preview-box" id="shColBox" style="background: #000000">
@@ -442,6 +462,56 @@
           </div>
         </div>
 
+        <div id="shSmoothControls" style="display: none; margin-top: 10px;">
+            <div class="input-group" style="margin-bottom: 14px;">
+                <label>Elevación (Material)</label>
+                <div class="smooth-elev-row" id="shSmoothElevationRow">
+                    <button class="smooth-elev-btn" id="smoothElev-0" onclick="App.shadow.applySmoothElevation(0)">0</button>
+                    <button class="smooth-elev-btn" id="smoothElev-1" onclick="App.shadow.applySmoothElevation(1)">1</button>
+                    <button class="smooth-elev-btn" id="smoothElev-2" onclick="App.shadow.applySmoothElevation(2)">2</button>
+                    <button class="smooth-elev-btn" id="smoothElev-3" onclick="App.shadow.applySmoothElevation(3)">3</button>
+                    <button class="smooth-elev-btn" id="smoothElev-4" onclick="App.shadow.applySmoothElevation(4)">4</button>
+                    <button class="smooth-elev-btn" id="smoothElev-5" onclick="App.shadow.applySmoothElevation(5)">5</button>
+                    <button class="smooth-elev-btn" id="smoothElev-6" onclick="App.shadow.applySmoothElevation(6)">6</button>
+                </div>
+            </div>
+
+            <div class="grid-pair" style="margin-bottom: 14px;">
+                <div class="input-group">
+                    <label>Preset de Componente</label>
+                    <div class="neu-size-grid">
+                        <button class="smooth-size-btn active" id="smoothSize-default" onclick="App.shadow.setSmoothSize('default')">Default</button>
+                        <button class="smooth-size-btn" id="smoothSize-button"          onclick="App.shadow.setSmoothSize('button')">Button</button>
+                        <button class="smooth-size-btn" id="smoothSize-card"            onclick="App.shadow.setSmoothSize('card')">Card</button>
+                        <button class="smooth-size-btn" id="smoothSize-image"           onclick="App.shadow.setSmoothSize('image')">Image</button>
+                        <button class="smooth-size-btn" id="smoothSize-hero"            onclick="App.shadow.setSmoothSize('hero')">Hero</button>
+                        <button class="smooth-size-btn" id="smoothSize-pill"            onclick="App.shadow.setSmoothSize('pill')">Pill</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Dirección de Luz</label>
+                    <div class="neu-light-grid" id="shSmoothLightGrid">
+                        <button class="neu-light-btn" id="smoothLight-tl" onclick="App.shadow.setSmoothLight('tl')" title="Top Left">↖</button>
+                        <button class="neu-light-btn active" id="smoothLight-t" onclick="App.shadow.setSmoothLight('t')" title="Top">↑</button>
+                        <button class="neu-light-btn" id="smoothLight-tr" onclick="App.shadow.setSmoothLight('tr')" title="Top Right">↗</button>
+                        <button class="neu-light-btn" id="smoothLight-l" onclick="App.shadow.setSmoothLight('l')" title="Left">←</button>
+                        <button class="neu-light-btn neu-light-center" disabled>✦</button>
+                        <button class="neu-light-btn" id="smoothLight-r" onclick="App.shadow.setSmoothLight('r')" title="Right">→</button>
+                        <button class="neu-light-btn" id="smoothLight-bl" onclick="App.shadow.setSmoothLight('bl')" title="Bottom Left">↙</button>
+                        <button class="neu-light-btn" id="smoothLight-b" onclick="App.shadow.setSmoothLight('b')" title="Bottom">↓</button>
+                        <button class="neu-light-btn" id="smoothLight-br" onclick="App.shadow.setSmoothLight('br')" title="Bottom Right">↘</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 10px;">
+                <div class="label-row">
+                    <label>Número de Capas</label><span id="valSmoothLayers" style="font-size: 0.75rem">6</span>
+                </div>
+                <input type="range" id="smoothLayers" min="2" max="12" value="6" oninput="App.shadow.setSmoothLayerCount(this.value)" />
+            </div>
+        </div>
+
         <div class="input-group" id="shInsetGroup" style="margin-top: 10px">
           <label>Opciones</label>
           <div class="checkbox-group" style="height: 50px">
@@ -451,32 +521,155 @@
         </div>
 
         <div id="shNeuControls" style="display: none; margin-top: 10px;">
-            <div class="input-group">
+            <div class="input-group" style="margin-bottom: 14px;">
                 <label>Forma (Shape)</label>
-                <div class="blob-type-group" style="margin-bottom: 0">
-                    <button class="blob-type-btn active" id="neuFlat" onclick="App.shadow.setNeuShape('flat')">Plano</button>
-                    <button class="blob-type-btn" id="neuConcave" onclick="App.shadow.setNeuShape('concave')">Cóncavo</button>
-                    <button class="blob-type-btn" id="neuConvex" onclick="App.shadow.setNeuShape('convex')">Convexo</button>
-                    <button class="blob-type-btn" id="neuPressed" onclick="App.shadow.setNeuShape('pressed')">Hundido</button>
+                <div class="neu-shape-grid">
+                    <button class="neu-shape-btn active" id="neuFlat"     onclick="App.shadow.setNeuShape('flat')">Plano</button>
+                    <button class="neu-shape-btn" id="neuConcave"          onclick="App.shadow.setNeuShape('concave')">Cóncavo</button>
+                    <button class="neu-shape-btn" id="neuConvex"           onclick="App.shadow.setNeuShape('convex')">Convexo</button>
+                    <button class="neu-shape-btn" id="neuPressed"          onclick="App.shadow.setNeuShape('pressed')">Hundido</button>
+                    <button class="neu-shape-btn" id="neuElevated"         onclick="App.shadow.setNeuShape('elevated')">Elevado</button>
+                    <button class="neu-shape-btn" id="neuFloating"         onclick="App.shadow.setNeuShape('floating')">Flotante</button>
                 </div>
             </div>
+
+            <div class="grid-pair" style="margin-bottom: 14px;">
+                <div class="input-group">
+                    <label>Preset de Componente</label>
+                    <div class="neu-size-grid">
+                        <button class="neu-size-btn active" id="neuSize-default" onclick="App.shadow.setNeuSize('default')">Default</button>
+                        <button class="neu-size-btn" id="neuSize-button"          onclick="App.shadow.setNeuSize('button')">Button</button>
+                        <button class="neu-size-btn" id="neuSize-card"            onclick="App.shadow.setNeuSize('card')">Card</button>
+                        <button class="neu-size-btn" id="neuSize-circle"          onclick="App.shadow.setNeuSize('circle')">Circle</button>
+                        <button class="neu-size-btn" id="neuSize-toggle"          onclick="App.shadow.setNeuSize('toggle')">Toggle</button>
+                        <button class="neu-size-btn" id="neuSize-avatar"          onclick="App.shadow.setNeuSize('avatar')">Avatar</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Dirección de Luz</label>
+                    <div class="neu-light-grid" id="shNeuLightGrid">
+                        <button class="neu-light-btn active" id="neuLight-tl" onclick="App.shadow.setNeuLight('tl')" title="Top Left">↖</button>
+                        <button class="neu-light-btn" id="neuLight-t"         onclick="App.shadow.setNeuLight('t')"  title="Top">↑</button>
+                        <button class="neu-light-btn" id="neuLight-tr"        onclick="App.shadow.setNeuLight('tr')" title="Top Right">↗</button>
+                        <button class="neu-light-btn" id="neuLight-l"         onclick="App.shadow.setNeuLight('l')"  title="Left">←</button>
+                        <button class="neu-light-btn neu-light-center" disabled>✦</button>
+                        <button class="neu-light-btn" id="neuLight-r"         onclick="App.shadow.setNeuLight('r')"  title="Right">→</button>
+                        <button class="neu-light-btn" id="neuLight-bl"        onclick="App.shadow.setNeuLight('bl')" title="Bottom Left">↙</button>
+                        <button class="neu-light-btn" id="neuLight-b"         onclick="App.shadow.setNeuLight('b')"  title="Bottom">↓</button>
+                        <button class="neu-light-btn" id="neuLight-br"        onclick="App.shadow.setNeuLight('br')" title="Bottom Right">↘</button>
+                    </div>
+                </div>
+            </div>
+
+            <label class="ts-check-label" style="margin: 0;">
+                <input type="checkbox" id="shNeuAutoColors" checked onchange="App.shadow.toggleNeuAuto()">
+                <span>Auto-derivar sombras desde color base <span style="color: var(--text-secondary); font-weight: 400;">(recomendado)</span></span>
+            </label>
         </div>
 
         <div id="shGlassControls" style="display: none; margin-top: 10px;">
-            <div class="grid-pair">
+            <div class="input-group" style="margin-bottom: 14px;">
+                <label>Tipo de Glass</label>
+                <div class="glass-type-row" id="shGlassTypeRow">
+                    <button class="glass-type-btn active" id="glassType-frosted" onclick="App.shadow.setGlassType('frosted')">
+                        <span class="glass-type-title">Frosted</span>
+                        <span class="glass-type-sub">Clásico blur</span>
+                    </button>
+                    <button class="glass-type-btn glass-type-liquid" id="glassType-liquid" onclick="App.shadow.setGlassType('liquid')">
+                        <span class="glass-type-title">Liquid ✨</span>
+                        <span class="glass-type-sub">iOS 26 · SVG displace</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="shGlassLiquidControls" style="display: none; margin-bottom: 14px;">
+                <div class="grid-pair">
+                    <div class="input-group">
+                        <div class="label-row">
+                            <label>Distorsión</label><span id="valGlassDistortion" style="font-size: 0.75rem">25</span>
+                        </div>
+                        <input type="range" id="glassDistortion" min="0" max="80" value="25" oninput="App.shadow.update()" />
+                    </div>
+                    <div class="input-group">
+                        <div class="label-row">
+                            <label>Fluidez (frecuencia)</label><span id="valGlassLiquidity" style="font-size: 0.75rem">30%</span>
+                        </div>
+                        <input type="range" id="glassLiquidity" min="0" max="100" value="30" oninput="App.shadow.update()" />
+                    </div>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 8px 0 0 0; line-height: 1.4;">
+                    El efecto liquid usa <code>feDisplacementMap</code> + <code>feTurbulence</code>. Requiere <code>backdrop-filter: url(...)</code> — Safari soporta completo; Chrome/Firefox parcial. El output incluye el SVG necesario.
+                </p>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 14px;">
+                <label>Preset de Componente</label>
+                <div class="glass-size-grid">
+                    <button class="glass-size-btn active" id="glassSize-card"   onclick="App.shadow.setGlassSize('card')">Card</button>
+                    <button class="glass-size-btn" id="glassSize-button"        onclick="App.shadow.setGlassSize('button')">Button</button>
+                    <button class="glass-size-btn" id="glassSize-modal"         onclick="App.shadow.setGlassSize('modal')">Modal</button>
+                    <button class="glass-size-btn" id="glassSize-navbar"        onclick="App.shadow.setGlassSize('navbar')">Navbar</button>
+                    <button class="glass-size-btn" id="glassSize-widget"        onclick="App.shadow.setGlassSize('widget')">Widget</button>
+                    <button class="glass-size-btn" id="glassSize-pill"          onclick="App.shadow.setGlassSize('pill')">Pill</button>
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 14px;">
+                <label>Fondo de Preview</label>
+                <div class="glass-bg-grid">
+                    <button class="glass-bg-btn active" id="glassBg-vibrant" onclick="App.shadow.setGlassBgStyle('vibrant')" style="background: linear-gradient(135deg,#ff006e,#8338ec,#3a86ff,#06ffa5);"></button>
+                    <button class="glass-bg-btn" id="glassBg-sunset"          onclick="App.shadow.setGlassBgStyle('sunset')"  style="background: linear-gradient(135deg,#f59e0b,#ef4444,#8b5cf6);"></button>
+                    <button class="glass-bg-btn" id="glassBg-ocean"           onclick="App.shadow.setGlassBgStyle('ocean')"   style="background: linear-gradient(135deg,#06b6d4,#3b82f6,#6366f1);"></button>
+                    <button class="glass-bg-btn" id="glassBg-dark"            onclick="App.shadow.setGlassBgStyle('dark')"    style="background: radial-gradient(at 30% 30%,#1e1b4b,#0f172a,#020617);"></button>
+                    <button class="glass-bg-btn" id="glassBg-minimal"         onclick="App.shadow.setGlassBgStyle('minimal')" style="background: linear-gradient(135deg,#f3f4f6,#e5e7eb);"></button>
+                    <button class="glass-bg-btn" id="glassBg-photo"           onclick="App.shadow.setGlassBgStyle('photo')"   style="background: linear-gradient(45deg,#fbbf24,#f472b6);"></button>
+                </div>
+                <div class="glass-bg-custom-row">
+                    <button class="glass-bg-btn glass-bg-custom" id="glassBg-custom" onclick="App.shadow.triggerGlassBgUpload()" title="Subir imagen propia">
+                        <span class="glass-bg-custom-icon">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        </span>
+                    </button>
+                    <span class="glass-bg-custom-label">Subir imagen para ver mejor el efecto glass</span>
+                    <input type="file" id="glassBgFileInput" accept="image/*" style="display:none" onchange="App.shadow.handleGlassBgUpload(event)">
+                </div>
+            </div>
+
+            <div class="grid-triple">
                 <div class="input-group">
                     <div class="label-row">
-                        <label>Ruido (Noise)</label><span id="valGlassNoise" style="font-size: 0.75rem">0%</span>
+                        <label>Ruido</label><span id="valGlassNoise" style="font-size: 0.75rem">0%</span>
                     </div>
                     <input type="range" id="glassNoise" min="0" max="20" value="0" oninput="App.shadow.update()" />
                 </div>
                 <div class="input-group">
-                    <label>Borde Brillante</label>
-                    <div class="checkbox-group" style="height: 50px; margin-top: 10px;">
-                        <label for="glassShine" style="margin: 0; cursor: pointer; color: var(--text-primary); font-weight: 600; text-transform: none; font-size: 0.9rem;">Activar Brillo</label>
-                        <input type="checkbox" id="glassShine" onchange="App.shadow.update()" />
+                    <div class="label-row">
+                        <label>Brillo (Brightness)</label><span id="valGlassBrightness" style="font-size: 0.75rem">110%</span>
                     </div>
+                    <input type="range" id="glassBrightness" min="50" max="150" value="110" oninput="App.shadow.update()" />
                 </div>
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Radio</label><span id="valGlassRadius" style="font-size: 0.75rem">20px</span>
+                    </div>
+                    <input type="range" id="glassRadius" min="0" max="60" value="20" oninput="App.shadow.update()" />
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 14px;">
+                <label>Texto del Preview</label>
+                <input type="text" id="glassText" placeholder="Glass Card" oninput="App.shadow.update()" />
+            </div>
+
+            <div class="grid-pair" style="margin-bottom: 0;">
+                <label class="ts-check-label" style="margin: 0;">
+                    <input type="checkbox" id="glassShine" onchange="App.shadow.update()">
+                    <span>Borde Brillante <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.75rem;">(gradiente)</span></span>
+                </label>
+                <label class="ts-check-label" style="margin: 0;">
+                    <input type="checkbox" id="glassTopHighlight" onchange="App.shadow.update()">
+                    <span>Highlight Superior <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.75rem;">(inset 1px)</span></span>
+                </label>
             </div>
         </div>
 
@@ -1381,6 +1574,396 @@
           </div>
       </div>
     </div>
+
+      <!-- ========== KEYFRAMES / ANIMATION ========== -->
+      <div id="section-keyframes" class="tool-section" role="tabpanel" aria-labelledby="tab-keyframes" tabindex="0">
+        <h2>CSS Animation Generator</h2>
+
+        <label style="display:block; margin-bottom: 10px;">Presets</label>
+        <div class="kf-preset-grid" id="kfPresets">
+            <button class="btn-small kf-preset" id="kfPreset-fade-in"     onclick="App.keyframes.setPreset('fade-in')">Fade In</button>
+            <button class="btn-small kf-preset" id="kfPreset-fade-out"    onclick="App.keyframes.setPreset('fade-out')">Fade Out</button>
+            <button class="btn-small kf-preset" id="kfPreset-slide-up"    onclick="App.keyframes.setPreset('slide-up')">Slide Up</button>
+            <button class="btn-small kf-preset" id="kfPreset-slide-down"  onclick="App.keyframes.setPreset('slide-down')">Slide Down</button>
+            <button class="btn-small kf-preset" id="kfPreset-slide-left"  onclick="App.keyframes.setPreset('slide-left')">Slide Left</button>
+            <button class="btn-small kf-preset" id="kfPreset-slide-right" onclick="App.keyframes.setPreset('slide-right')">Slide Right</button>
+            <button class="btn-small kf-preset" id="kfPreset-zoom-in"     onclick="App.keyframes.setPreset('zoom-in')">Zoom In</button>
+            <button class="btn-small kf-preset" id="kfPreset-zoom-out"    onclick="App.keyframes.setPreset('zoom-out')">Zoom Out</button>
+            <button class="btn-small kf-preset" id="kfPreset-rotate"      onclick="App.keyframes.setPreset('rotate')">Rotate</button>
+            <button class="btn-small kf-preset" id="kfPreset-pulse"       onclick="App.keyframes.setPreset('pulse')">Pulse</button>
+            <button class="btn-small kf-preset" id="kfPreset-shake"       onclick="App.keyframes.setPreset('shake')">Shake</button>
+            <button class="btn-small kf-preset" id="kfPreset-bounce"      onclick="App.keyframes.setPreset('bounce')">Bounce</button>
+        </div>
+
+        <div class="preview-container" style="height: 200px;">
+            <div id="keyframesPreviewBox" class="kf-preview-box">ANIM</div>
+        </div>
+
+        <div style="text-align:center; margin-bottom: 20px;">
+            <button class="btn-small" onclick="App.keyframes.replay()" style="margin: 0 auto;">▶ Replay</button>
+        </div>
+
+        <div class="grid-pair">
+            <div class="input-group">
+                <div class="label-row"><label>Duración</label><span id="valKfDuration">1s</span></div>
+                <input type="range" id="kfDuration" min="0.1" max="5" step="0.1" value="1" oninput="App.keyframes.update()">
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Delay</label><span id="valKfDelay">0s</span></div>
+                <input type="range" id="kfDelay" min="0" max="3" step="0.1" value="0" oninput="App.keyframes.update()">
+            </div>
+        </div>
+
+        <div class="grid-triple">
+            <div class="input-group">
+                <label>Timing</label>
+                <select id="kfTiming" onchange="App.keyframes.update()">
+                    <option value="linear">linear</option>
+                    <option value="ease" selected>ease</option>
+                    <option value="ease-in">ease-in</option>
+                    <option value="ease-out">ease-out</option>
+                    <option value="ease-in-out">ease-in-out</option>
+                    <option value="cubic-bezier(0.34, 1.56, 0.64, 1)">bounce-out</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Iteraciones</label>
+                <select id="kfIterations" onchange="App.keyframes.update()">
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="infinite">infinite</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Dirección</label>
+                <select id="kfDirection" onchange="App.keyframes.update()">
+                    <option value="normal" selected>normal</option>
+                    <option value="reverse">reverse</option>
+                    <option value="alternate">alternate</option>
+                    <option value="alternate-reverse">alternate-reverse</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Fill Mode</label>
+            <select id="kfFill" onchange="App.keyframes.update()">
+                <option value="none">none</option>
+                <option value="forwards">forwards</option>
+                <option value="backwards">backwards</option>
+                <option value="both" selected>both</option>
+            </select>
+        </div>
+
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <label style="margin:0;">Keyframe Stops</label>
+            <button class="btn-small" onclick="App.keyframes.addStop()">+ Añadir</button>
+        </div>
+        <div id="kfStopsList" class="kf-stops-list"></div>
+
+        <div class="output-box">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERATED</span>
+                <button class="copy-btn" onclick="copyText('keyframesResult', this)">Copiar</button>
+            </div>
+            <div class="code-result" id="keyframesResult"></div>
+        </div>
+      </div>
+
+      <!-- ========== TYPE SCALE ========== -->
+      <div id="section-typescale" class="tool-section" role="tabpanel" aria-labelledby="tab-typescale" tabindex="0">
+        <h2>Type Scale</h2>
+
+        <div class="grid-pair">
+            <div class="input-group">
+                <div class="label-row"><label>Tamaño Base</label><span id="valTsBase">16px</span></div>
+                <input type="range" id="tsBase" min="12" max="24" step="1" value="16" oninput="App.typescale.update()">
+            </div>
+            <div class="input-group">
+                <label>Ratio</label>
+                <select id="tsRatio" onchange="App.typescale.update()">
+                    <option value="1.067">1.067 — Minor Second</option>
+                    <option value="1.125">1.125 — Major Second</option>
+                    <option value="1.200">1.200 — Minor Third</option>
+                    <option value="1.250" selected>1.250 — Major Third</option>
+                    <option value="1.333">1.333 — Perfect Fourth</option>
+                    <option value="1.414">1.414 — Augmented Fourth</option>
+                    <option value="1.500">1.500 — Perfect Fifth</option>
+                    <option value="1.618">1.618 — Golden Ratio</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid-triple">
+            <div class="input-group">
+                <div class="label-row"><label>Steps Arriba</label><span id="valTsStepsUp">6</span></div>
+                <input type="range" id="tsStepsUp" min="3" max="8" value="6" oninput="App.typescale.update()">
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Steps Abajo</label><span id="valTsStepsDown">2</span></div>
+                <input type="range" id="tsStepsDown" min="0" max="3" value="2" oninput="App.typescale.update()">
+            </div>
+            <div class="input-group">
+                <label>Font Family</label>
+                <select id="tsFont" onchange="App.typescale.update()">
+                    <option value="system" selected>System Sans</option>
+                    <option value="serif">Serif</option>
+                    <option value="mono">Mono</option>
+                    <option value="display">Display</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 16px;">
+            <label>Texto de muestra</label>
+            <input type="text" id="tsSample" value="The quick brown fox jumps" oninput="App.typescale.update()">
+        </div>
+
+        <div class="grid-pair" style="margin-bottom: 20px;">
+            <label class="ts-check-label">
+                <input type="checkbox" id="tsFluid" onchange="App.typescale.update()">
+                <span>Fluid Scale (clamp)</span>
+            </label>
+            <label class="ts-check-label">
+                <input type="checkbox" id="tsUtilities" onchange="App.typescale.update()">
+                <span>Exportar como clases utilitarias</span>
+            </label>
+        </div>
+
+        <div class="ts-preview-box" id="typescalePreview"></div>
+
+        <div class="output-box">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERATED</span>
+                <button class="copy-btn" onclick="copyText('typescaleResult', this)">Copiar</button>
+            </div>
+            <div class="code-result" id="typescaleResult"></div>
+        </div>
+      </div>
+
+      <!-- ========== BORDER RADIUS ========== -->
+      <div id="section-borderradius" class="tool-section" role="tabpanel" aria-labelledby="tab-borderradius" tabindex="0">
+        <h2>Border Radius</h2>
+
+        <label style="display:block; margin-bottom: 10px;">Presets</label>
+        <div class="br-preset-grid">
+            <button class="btn-small br-preset-btn" id="brPreset-card"     onclick="App.borderradius.setPreset('card')">Card</button>
+            <button class="btn-small br-preset-btn" id="brPreset-squircle" onclick="App.borderradius.setPreset('squircle')">Squircle</button>
+            <button class="btn-small br-preset-btn" id="brPreset-circle"   onclick="App.borderradius.setPreset('circle')">Circle</button>
+            <button class="btn-small br-preset-btn" id="brPreset-pill"     onclick="App.borderradius.setPreset('pill')">Pill</button>
+            <button class="btn-small br-preset-btn" id="brPreset-leaf"     onclick="App.borderradius.setPreset('leaf')">Leaf</button>
+            <button class="btn-small br-preset-btn" id="brPreset-shield"   onclick="App.borderradius.setPreset('shield')">Shield</button>
+            <button class="btn-small br-preset-btn" id="brPreset-wave"     onclick="App.borderradius.setPreset('wave')">Wave</button>
+            <button class="btn-small br-preset-btn" id="brPreset-blob"     onclick="App.borderradius.setPreset('blob')">Blob</button>
+        </div>
+
+        <div class="preview-container br-preview-container">
+            <div id="brPreviewBox" class="br-preview-box">Preview</div>
+        </div>
+
+        <div class="grid-triple" style="margin-bottom: 20px;">
+            <div class="input-group">
+                <label>Unidad</label>
+                <select id="brUnit" onchange="App.borderradius.update()">
+                    <option value="px" selected>px</option>
+                    <option value="%">%</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Ancho Preview</label><span id="valBrWidth">200px</span></div>
+                <input type="range" id="brWidth" min="80" max="400" value="200" oninput="App.borderradius.update()">
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Alto Preview</label><span id="valBrHeight">200px</span></div>
+                <input type="range" id="brHeight" min="80" max="400" value="200" oninput="App.borderradius.update()">
+            </div>
+        </div>
+
+        <div class="grid-pair" style="margin-bottom: 16px;">
+            <label class="ts-check-label">
+                <input type="checkbox" id="brAdvanced" onchange="App.borderradius.update()">
+                <span>Modo avanzado (radios elípticos H/V)</span>
+            </label>
+            <div style="display:flex; gap:8px; align-items: center;">
+                <button class="btn-small" onclick="App.borderradius.setAllCorners(20)">Reset</button>
+                <button class="btn-small" onclick="App.borderradius.randomize()">Random</button>
+            </div>
+        </div>
+
+        <div class="br-corners-grid">
+            <div class="br-corner">
+                <div class="br-corner-label" id="brCornerLabel-tl">Top Left</div>
+                <div class="br-h-row">
+                    <span class="br-axis">H</span>
+                    <input type="range" id="brTlH" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrTlH">20px</span>
+                </div>
+                <div class="br-v-row" style="display:none;">
+                    <span class="br-axis">V</span>
+                    <input type="range" id="brTlV" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrTlV">20px</span>
+                </div>
+            </div>
+            <div class="br-corner">
+                <div class="br-corner-label" id="brCornerLabel-tr">Top Right</div>
+                <div class="br-h-row">
+                    <span class="br-axis">H</span>
+                    <input type="range" id="brTrH" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrTrH">20px</span>
+                </div>
+                <div class="br-v-row" style="display:none;">
+                    <span class="br-axis">V</span>
+                    <input type="range" id="brTrV" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrTrV">20px</span>
+                </div>
+            </div>
+            <div class="br-corner">
+                <div class="br-corner-label" id="brCornerLabel-bl">Bottom Left</div>
+                <div class="br-h-row">
+                    <span class="br-axis">H</span>
+                    <input type="range" id="brBlH" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrBlH">20px</span>
+                </div>
+                <div class="br-v-row" style="display:none;">
+                    <span class="br-axis">V</span>
+                    <input type="range" id="brBlV" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrBlV">20px</span>
+                </div>
+            </div>
+            <div class="br-corner">
+                <div class="br-corner-label" id="brCornerLabel-br">Bottom Right</div>
+                <div class="br-h-row">
+                    <span class="br-axis">H</span>
+                    <input type="range" id="brBrH" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrBrH">20px</span>
+                </div>
+                <div class="br-v-row" style="display:none;">
+                    <span class="br-axis">V</span>
+                    <input type="range" id="brBrV" min="0" max="150" value="20" oninput="App.borderradius.update()">
+                    <span class="br-val" id="valBrBrV">20px</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-box">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERATED</span>
+                <button class="copy-btn" onclick="copyText('borderradiusResult', this)">Copiar</button>
+            </div>
+            <div class="code-result" id="borderradiusResult">border-radius: 20px;</div>
+        </div>
+      </div>
+
+      <!-- ========== SCROLLBAR ========== -->
+      <div id="section-scrollbar" class="tool-section" role="tabpanel" aria-labelledby="tab-scrollbar" tabindex="0">
+        <h2>Scrollbar Customizer</h2>
+
+        <label style="display:block; margin-bottom: 10px;">Presets</label>
+        <div class="br-preset-grid" style="margin-bottom: 20px;">
+            <button class="btn-small sb-preset-btn" id="sbPreset-minimal"  onclick="App.scrollbar.setPreset('minimal')">Minimal</button>
+            <button class="btn-small sb-preset-btn" id="sbPreset-rounded"  onclick="App.scrollbar.setPreset('rounded')">Rounded</button>
+            <button class="btn-small sb-preset-btn" id="sbPreset-pill"     onclick="App.scrollbar.setPreset('pill')">Pill</button>
+            <button class="btn-small sb-preset-btn" id="sbPreset-dark"     onclick="App.scrollbar.setPreset('dark')">Dark</button>
+            <button class="btn-small sb-preset-btn" id="sbPreset-neon"     onclick="App.scrollbar.setPreset('neon')">Neon</button>
+            <button class="btn-small sb-preset-btn" id="sbPreset-invisible" onclick="App.scrollbar.setPreset('invisible')">Invisible</button>
+        </div>
+
+        <div class="preview-container sb-preview-container">
+            <div id="scrollbarPreviewBox" class="sb-preview-scrollable" data-orientation="vertical">
+                <div class="sb-preview-content">
+                    <h4>Lorem ipsum dolor sit amet</h4>
+                    <p>Consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                    <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                    <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-pair">
+            <div class="input-group">
+                <div class="label-row"><label>Grosor</label><span id="valSbWidth">10px</span></div>
+                <input type="range" id="sbWidth" min="0" max="24" value="10" oninput="App.scrollbar.update()">
+            </div>
+            <div class="input-group">
+                <label>Orientación Preview</label>
+                <select id="sbOrientation" onchange="App.scrollbar.update()">
+                    <option value="vertical" selected>Vertical</option>
+                    <option value="horizontal">Horizontal</option>
+                    <option value="both">Ambos</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid-triple">
+            <div class="input-group">
+                <div class="label-row"><label>Thumb Radius</label><span id="valSbRadius">10px</span></div>
+                <input type="range" id="sbRadius" min="0" max="20" value="10" oninput="App.scrollbar.update()">
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Track Radius</label><span id="valSbTrackRadius">10px</span></div>
+                <input type="range" id="sbTrackRadius" min="0" max="20" value="10" oninput="App.scrollbar.update()">
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Thumb Padding</label><span id="valSbThumbPadding">0px</span></div>
+                <input type="range" id="sbThumbPadding" min="0" max="6" value="0" oninput="App.scrollbar.update()">
+            </div>
+        </div>
+
+        <div class="grid-triple">
+            <div class="input-group">
+                <label>Color Track</label>
+                <div class="pro-color-picker">
+                    <div class="color-preview-box" id="sbTrackBox" style="background: #f2f2f7">
+                        <input type="color" id="sbTrackColor" value="#f2f2f7" oninput="syncProPicker('sbTrack', this.value)" />
+                    </div>
+                    <div class="hex-input-wrapper">
+                        <input type="text" id="sbTrackText" value="#F2F2F7" oninput="syncProPicker('sbTrack', this.value)" />
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Color Thumb</label>
+                <div class="pro-color-picker">
+                    <div class="color-preview-box" id="sbThumbBox" style="background: #8e8e93">
+                        <input type="color" id="sbThumbColor" value="#8e8e93" oninput="syncProPicker('sbThumb', this.value)" />
+                    </div>
+                    <div class="hex-input-wrapper">
+                        <input type="text" id="sbThumbText" value="#8E8E93" oninput="syncProPicker('sbThumb', this.value)" />
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Color Hover</label>
+                <div class="pro-color-picker">
+                    <div class="color-preview-box" id="sbHoverBox" style="background: #636366">
+                        <input type="color" id="sbHoverColor" value="#636366" oninput="syncProPicker('sbHover', this.value)" />
+                    </div>
+                    <div class="hex-input-wrapper">
+                        <input type="text" id="sbHoverText" value="#636366" oninput="syncProPicker('sbHover', this.value)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <label class="ts-check-label" style="margin: 0 0 20px 0;">
+            <input type="checkbox" id="sbFirefox" checked onchange="App.scrollbar.update()">
+            <span>Incluir fallback Firefox (<code>scrollbar-width</code> / <code>scrollbar-color</code>)</span>
+        </label>
+
+        <div class="output-box">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS GENERATED</span>
+                <button class="copy-btn" onclick="copyText('scrollbarResult', this)">Copiar</button>
+            </div>
+            <div class="code-result" id="scrollbarResult"></div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Custom Modal -->
@@ -1397,11 +1980,11 @@
 
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=05d3c2ad"></script>
-    <script src="js/core/core.js?v=7c16c926"></script>
+    <script src="js/core/core.js?v=63f51b18"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=1976fcff"></script>
     <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
-    <script src="js/modules/shadow.js?v=4748e081"></script>
+    <script src="js/modules/shadow.js?v=8dd2b48e"></script>
     <script src="js/modules/contrast.js?v=48375aaf"></script>
     <script src="js/modules/gradient.js?v=f4769657"></script>
     <script src="js/modules/converter.js?v=5bf46185"></script>
@@ -1412,6 +1995,10 @@
     <script src="js/modules/palette.js?v=bdc6e6a7"></script>
     <script src="js/modules/metatags.js?v=fbe9e4fa"></script>
     <script src="js/modules/transform.js?v=b1a6af0d"></script>
-    <script src="js/main.js?v=ee4172de"></script>
+    <script src="js/modules/keyframes.js?v=59f68de6"></script>
+    <script src="js/modules/typescale.js?v=a18b7253"></script>
+    <script src="js/modules/borderradius.js?v=14d61ed0"></script>
+    <script src="js/modules/scrollbar.js?v=ad2b657b"></script>
+    <script src="js/main.js?v=6ab3a2a0"></script>
   </body>
 </html>
