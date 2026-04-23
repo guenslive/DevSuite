@@ -17,9 +17,16 @@
     </script>
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
-    <link rel="stylesheet" href="css/layout.css?v=f61b5131">
-    <link rel="stylesheet" href="css/tools.css?v=58a4f58b">
-    <link rel="stylesheet" href="css/metatags.css?v=1">
+    <link rel="stylesheet" href="css/layout.css?v=1f72fe19">
+    <link rel="stylesheet" href="css/tools.css?v=2e50bb42">
+    <link rel="stylesheet" href="css/blob.css?v=83abcc8e">
+    <link rel="stylesheet" href="css/gradient.css?v=048e66f3">
+    <link rel="stylesheet" href="css/contrast.css?v=32e136c6">
+    <link rel="stylesheet" href="css/converter.css?v=e39a887c">
+    <link rel="stylesheet" href="css/flex.css?v=e4638f4c">
+    <link rel="stylesheet" href="css/grid.css?v=bdbd2e42">
+    <link rel="stylesheet" href="css/palette.css?v=c1f424b5">
+    <link rel="stylesheet" href="css/metatags.css?v=3628ac30">
   </head>
   <body>
     <div id="loader-overlay">
@@ -45,50 +52,50 @@
         </label>
         
         <div class="search-wrapper">
-          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="toolSearch" placeholder="Search tools..." oninput="App.core.handleSearch(this.value)" onkeydown="App.core.handleSearchKeydown(event)" autocomplete="off">
-          <div id="searchResults" class="search-results"></div>
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="toolSearch" placeholder="Search tools..." oninput="App.core.handleSearch(this.value)" onkeydown="App.core.handleSearchKeydown(event)" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="searchResults" aria-expanded="false" aria-label="Buscar herramientas">
+          <div id="searchResults" class="search-results" role="listbox" aria-label="Resultados de búsqueda"></div>
         </div>
 
         <div class="tabs-wrapper">
           <button id="scrollLeftBtn" class="scroll-btn" onclick="App.core.scrollTabs(-1)" aria-label="Scroll Left">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
           </button>
-          <div class="tabs-container">
+          <div class="tabs-container" role="tablist" aria-label="Herramientas">
             <!-- Layout -->
-            <button class="tab-btn active" onclick="switchTab('clamp')">Clamp</button>
-            <button class="tab-btn" onclick="switchTab('ratio')">Ratio</button>
-            <button class="tab-btn" onclick="switchTab('flex')">Flexbox</button>
-            <button class="tab-btn" onclick="switchTab('grid')">Grid</button>
-            
-            <div class="tab-separator"></div>
-            
-            <!-- Effects -->
-            <button class="tab-btn" onclick="switchTab('shadow')">Shadow</button>
-            <button class="tab-btn" onclick="switchTab('gradient')">Gradient</button>
-            <button class="tab-btn" onclick="switchTab('filter')">Filters</button>
-            <button class="tab-btn" onclick="switchTab('transform')">Transform</button>
-            <button class="tab-btn" onclick="switchTab('blob')">Shape</button>
-            
-            <div class="tab-separator"></div>
-            
-            <!-- Colors & Assets -->
-            <button class="tab-btn" onclick="switchTab('contrast')">Contrast</button>
-            <button class="tab-btn" onclick="switchTab('palette')">Palette</button>
-            <button class="tab-btn" onclick="switchTab('converter')">Converter</button>
-            <button class="tab-btn" onclick="switchTab('placeholder')">Image</button>
+            <button class="tab-btn active" id="tab-clamp" role="tab" aria-selected="true" aria-controls="section-clamp" tabindex="0" onclick="switchTab('clamp', event)">Clamp</button>
+            <button class="tab-btn" id="tab-ratio" role="tab" aria-selected="false" aria-controls="section-ratio" tabindex="-1" onclick="switchTab('ratio', event)">Ratio</button>
+            <button class="tab-btn" id="tab-flex" role="tab" aria-selected="false" aria-controls="section-flex" tabindex="-1" onclick="switchTab('flex', event)">Flexbox</button>
+            <button class="tab-btn" id="tab-grid" role="tab" aria-selected="false" aria-controls="section-grid" tabindex="-1" onclick="switchTab('grid', event)">Grid</button>
 
-            <div class="tab-separator"></div>
+            <div class="tab-separator" aria-hidden="true"></div>
+
+            <!-- Effects -->
+            <button class="tab-btn" id="tab-shadow" role="tab" aria-selected="false" aria-controls="section-shadow" tabindex="-1" onclick="switchTab('shadow', event)">Shadow</button>
+            <button class="tab-btn" id="tab-gradient" role="tab" aria-selected="false" aria-controls="section-gradient" tabindex="-1" onclick="switchTab('gradient', event)">Gradient</button>
+            <button class="tab-btn" id="tab-filter" role="tab" aria-selected="false" aria-controls="section-filter" tabindex="-1" onclick="switchTab('filter', event)">Filters</button>
+            <button class="tab-btn" id="tab-transform" role="tab" aria-selected="false" aria-controls="section-transform" tabindex="-1" onclick="switchTab('transform', event)">Transform</button>
+            <button class="tab-btn" id="tab-blob" role="tab" aria-selected="false" aria-controls="section-blob" tabindex="-1" onclick="switchTab('blob', event)">Shape</button>
+
+            <div class="tab-separator" aria-hidden="true"></div>
+
+            <!-- Colors & Assets -->
+            <button class="tab-btn" id="tab-contrast" role="tab" aria-selected="false" aria-controls="section-contrast" tabindex="-1" onclick="switchTab('contrast', event)">Contrast</button>
+            <button class="tab-btn" id="tab-palette" role="tab" aria-selected="false" aria-controls="section-palette" tabindex="-1" onclick="switchTab('palette', event)">Palette</button>
+            <button class="tab-btn" id="tab-converter" role="tab" aria-selected="false" aria-controls="section-converter" tabindex="-1" onclick="switchTab('converter', event)">Converter</button>
+            <button class="tab-btn" id="tab-placeholder" role="tab" aria-selected="false" aria-controls="section-placeholder" tabindex="-1" onclick="switchTab('placeholder', event)">Image</button>
+
+            <div class="tab-separator" aria-hidden="true"></div>
 
             <!-- Utils -->
-            <button class="tab-btn" onclick="switchTab('metatags')">Meta Tags</button>
+            <button class="tab-btn" id="tab-metatags" role="tab" aria-selected="false" aria-controls="section-metatags" tabindex="-1" onclick="switchTab('metatags', event)">Meta Tags</button>
           </div>
           <button id="scrollRightBtn" class="scroll-btn" onclick="App.core.scrollTabs(1)" aria-label="Scroll Right">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
         </div>
         <label class="switch">
-          <input id="themeSwitchInput" type="checkbox" onchange="App.core.toggleTheme()" />
+          <input id="themeSwitchInput" type="checkbox" onchange="App.core.toggleTheme(event)" />
           <div class="slider round">
             <div class="sun-moon">
               <svg id="moon-dot-1" class="moon-dot" viewBox="0 0 100 100">
@@ -155,7 +162,7 @@
         </label>
       </div>
 
-      <div id="section-clamp" class="tool-section active">
+      <div id="section-clamp" class="tool-section active" role="tabpanel" aria-labelledby="tab-clamp" tabindex="0">
         <h2>Clamp Generator</h2>
         
         <div class="preview-container" style="flex-direction: column; align-items: stretch; gap: 10px; padding: 20px; background: var(--bg-secondary); margin-bottom: 20px;">
@@ -214,7 +221,7 @@
         </div>
       </div>
 
-      <div id="section-ratio" class="tool-section">
+      <div id="section-ratio" class="tool-section" role="tabpanel" aria-labelledby="tab-ratio" tabindex="0">
         <h2>Aspect Ratio</h2>
         
         <div class="preview-container">
@@ -274,7 +281,7 @@
         </div>
       </div>
 
-      <div id="section-placeholder" class="tool-section">
+      <div id="section-placeholder" class="tool-section" role="tabpanel" aria-labelledby="tab-placeholder" tabindex="0">
         <h2>Placeholder Gen</h2>
         <div class="preview-container">
           <canvas id="placeholderCanvas"></canvas>
@@ -348,7 +355,7 @@
         </div>
       </div>
 
-      <div id="section-shadow" class="tool-section">
+      <div id="section-shadow" class="tool-section" role="tabpanel" aria-labelledby="tab-shadow" tabindex="0">
         <h2>Shadow Generator</h2>
         <div class="blob-type-group" style="margin-bottom: 20px">
           <button class="blob-type-btn active" id="modeSmooth" onclick="App.shadow.setMode('smooth')">Smooth</button>
@@ -495,7 +502,7 @@
         </div>
       </div>
 
-      <div id="section-contrast" class="tool-section">
+      <div id="section-contrast" class="tool-section" role="tabpanel" aria-labelledby="tab-contrast" tabindex="0">
         <h2>Contrast Checker</h2>
         <div class="contrast-preview" id="contrastPreviewBox" style="background-color: #ffffff; color: #000000">
           <div class="contrast-score" id="contrastScore">21.00</div>
@@ -557,7 +564,7 @@
         </div>
       </div>
 
-      <div id="section-gradient" class="tool-section">
+      <div id="section-gradient" class="tool-section" role="tabpanel" aria-labelledby="tab-gradient" tabindex="0">
         <h2>Interactive Gradient</h2>
         <div class="grad-bar-wrapper">
           <div class="grad-bar-visual" id="gradBarVisual">
@@ -594,7 +601,7 @@
         </div>
       </div>
 
-      <div id="section-converter" class="tool-section">
+      <div id="section-converter" class="tool-section" role="tabpanel" aria-labelledby="tab-converter" tabindex="0">
         <h2>Color Converter</h2>
         <div class="grid-pair">
           <div class="input-group">
@@ -646,7 +653,7 @@
         </div>
       </div>
 
-      <div id="section-blob" class="tool-section">
+      <div id="section-blob" class="tool-section" role="tabpanel" aria-labelledby="tab-blob" tabindex="0">
         <h2>Shape Generator</h2>
         <div class="blob-type-group" style="margin-bottom: 24px">
           <button class="blob-type-btn active" id="shapeToolBlob" onclick="App.shape.switchTool('blob')">Organic Blob</button>
@@ -812,7 +819,7 @@
         </div>
       </div>
 
-      <div id="section-filter" class="tool-section">
+      <div id="section-filter" class="tool-section" role="tabpanel" aria-labelledby="tab-filter" tabindex="0">
         <h2>CSS Filter Studio</h2>
         <div class="preview-container" style="height: 280px; padding: 0; overflow: hidden; position: relative;">
           <img id="filterPreviewImg" src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" style="width: 100%; height: 100%; object-fit: cover; transition: filter 0.2s;" alt="Preview" />
@@ -884,7 +891,7 @@
         </div>
       </div>
 
-      <div id="section-flex" class="tool-section">
+      <div id="section-flex" class="tool-section" role="tabpanel" aria-labelledby="tab-flex" tabindex="0">
         <h2>Flexbox Playground</h2>
         <div style="position: relative; margin-bottom: 20px">
           <div id="flexPreview" class="flex-preview-box"></div>
@@ -961,7 +968,7 @@
           <div class="code-result" id="flexResult">display: flex; ...</div>
         </div>
       </div>
-      <div id="section-grid" class="tool-section">
+      <div id="section-grid" class="tool-section" role="tabpanel" aria-labelledby="tab-grid" tabindex="0">
         <div class="header-row" style="margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
            <h2 style="margin:0; text-align: left;">Grid Builder Pro</h2>
            <div class="tabs-container" style="width: auto; margin:0;">
@@ -1052,7 +1059,7 @@
         </div>
       </div>
 
-      <div id="section-palette" class="tool-section">
+      <div id="section-palette" class="tool-section" role="tabpanel" aria-labelledby="tab-palette" tabindex="0">
         <h2>Palette Generator</h2>
         
         <div class="palette-dashboard">
@@ -1104,7 +1111,7 @@
         </div>
       </div>
 
-      <div id="section-transform" class="tool-section">
+      <div id="section-transform" class="tool-section" role="tabpanel" aria-labelledby="tab-transform" tabindex="0">
         <h2>Transform Generator</h2>
         
         <!-- Tabs de Modo -->
@@ -1303,7 +1310,7 @@
       </div>
 
         <!-- Meta Tags Tool -->
-    <div id="section-metatags" class="tool-section">
+    <div id="section-metatags" class="tool-section" role="tabpanel" aria-labelledby="tab-metatags" tabindex="0">
       <h2>Meta Tags Generator</h2>
       <div class="controls-panel">
         <div class="input-group">
@@ -1390,7 +1397,7 @@
 
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=05d3c2ad"></script>
-    <script src="js/core/core.js?v=46467125"></script>
+    <script src="js/core/core.js?v=7c16c926"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=1976fcff"></script>
     <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
@@ -1403,8 +1410,8 @@
     <script src="js/modules/flex.js?v=174bdb41"></script>
     <script src="js/modules/grid.js?v=5bf7431d"></script>
     <script src="js/modules/palette.js?v=bdc6e6a7"></script>
-    <script src="js/modules/metatags.js?v=12345678"></script>
+    <script src="js/modules/metatags.js?v=fbe9e4fa"></script>
     <script src="js/modules/transform.js?v=b1a6af0d"></script>
-    <script src="js/main.js?v=82397f3e"></script>
+    <script src="js/main.js?v=ee4172de"></script>
   </body>
 </html>
