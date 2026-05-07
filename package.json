@@ -7,9 +7,14 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "design:lint": "design.md lint DESIGN.md",
+    "design:export:tailwind": "design.md export --format tailwind DESIGN.md > tokens.tailwind.json",
+    "design:export:dtcg": "design.md export --format dtcg DESIGN.md > tokens.dtcg.json",
+    "design:spec": "design.md spec"
   },
   "devDependencies": {
+    "@google/design.md": "^0.1.1",
     "@vitest/coverage-v8": "^1.6.0",
     "@vitest/ui": "^1.6.0",
     "jsdom": "^24.1.0",
