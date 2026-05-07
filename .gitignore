@@ -3,3 +3,7 @@ coverage/
 .vitest/
 .DS_Store
 *.log
+
+# design.md generated exports
+tokens.tailwind.json
+tokens.dtcg.json
