@@ -68,3 +68,122 @@
 .fail {
   background-color: var(--fail-color);
 }
+
+.apca-panel {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+}
+.apca-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.apca-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.apca-desc {
+  margin-left: 6px;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  opacity: 0.75;
+}
+.apca-score {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.apca-level {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+}
+.apca-excellent { background-color: var(--pass-color); }
+.apca-good { background-color: var(--pass-color); opacity: 0.85; }
+.apca-fair { background-color: #ff9500; }
+.apca-fail { background-color: var(--fail-color); }
+
+.apca-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  padding: 0 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.suggestion-panel {
+  margin-top: 20px;
+}
+.suggestion-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.suggestion-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.suggestion-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.suggestion-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--text-secondary);
+}
+.suggestion-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+.suggestion-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.suggestion-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+.suggestion-hex {
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
