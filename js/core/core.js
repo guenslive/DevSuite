@@ -384,5 +384,7 @@ App.core = {
         if (t === "typescale") App.typescale.update();
         if (t === "borderradius") App.borderradius.update();
         if (t === "scrollbar") App.scrollbar.update();
+
+        if (App.urlState) App.urlState.onTabChange(t);
     },
 };
