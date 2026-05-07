@@ -104,6 +104,7 @@ App.init = function() {
     App._initAllTools();
     App._initScrollButtons();
     App._initSearchDismiss();
+    if (App.urlState) App.urlState.init();
     App._hideLoader();
 };
 
