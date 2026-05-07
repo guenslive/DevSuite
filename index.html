@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="css/tools.css?v=ecf2eac0">
     <link rel="stylesheet" href="css/blob.css?v=83abcc8e">
     <link rel="stylesheet" href="css/gradient.css?v=048e66f3">
-    <link rel="stylesheet" href="css/contrast.css?v=32e136c6">
+    <link rel="stylesheet" href="css/contrast.css?v=8d0ada5d">
     <link rel="stylesheet" href="css/converter.css?v=e39a887c">
     <link rel="stylesheet" href="css/flex.css?v=e4638f4c">
     <link rel="stylesheet" href="css/grid.css?v=bdbd2e42">
@@ -747,7 +747,41 @@
             <div id="badgeAAALg" class="res-badge pass">PASS</div>
           </div>
         </div>
-        
+
+        <div class="apca-panel">
+          <div class="apca-head">
+            <div>
+              <span class="apca-title">APCA</span>
+              <span class="apca-desc">(WCAG 3 draft — perceptual contrast)</span>
+            </div>
+            <div id="apcaScore" class="apca-score">+0.0 Lc</div>
+          </div>
+          <div id="apcaLevel" class="apca-level apca-fail">Insufficient</div>
+          <div class="apca-scale">
+            <span>15</span><span>30</span><span>45</span><span>60</span><span>75</span><span>90</span>
+          </div>
+        </div>
+
+        <div class="suggestion-panel">
+          <div class="suggestion-title">SUGERENCIAS (AA 4.5:1)</div>
+          <div class="suggestion-grid">
+            <button type="button" class="suggestion-btn" onclick="App.contrast.applySuggestion('fg')">
+              <span class="suggestion-swatch" id="fgFixPreview"></span>
+              <span class="suggestion-meta">
+                <span class="suggestion-label">Ajustar FG</span>
+                <span class="suggestion-hex">—</span>
+              </span>
+            </button>
+            <button type="button" class="suggestion-btn" onclick="App.contrast.applySuggestion('bg')">
+              <span class="suggestion-swatch" id="bgFixPreview"></span>
+              <span class="suggestion-meta">
+                <span class="suggestion-label">Ajustar BG</span>
+                <span class="suggestion-hex">—</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
         <div class="input-group" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <label style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; margin: 0;">RECIENTES</label>
@@ -1980,12 +2014,13 @@
 
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=05d3c2ad"></script>
-    <script src="js/core/core.js?v=63f51b18"></script>
+    <script src="js/core/core.js?v=f63151b3"></script>
+    <script src="js/core/urlstate.js?v=84ed76af"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=1976fcff"></script>
     <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
     <script src="js/modules/shadow.js?v=8dd2b48e"></script>
-    <script src="js/modules/contrast.js?v=48375aaf"></script>
+    <script src="js/modules/contrast.js?v=3f398b2f"></script>
     <script src="js/modules/gradient.js?v=f4769657"></script>
     <script src="js/modules/converter.js?v=5bf46185"></script>
     <script src="js/modules/shape.js?v=1adaa847"></script>
@@ -1999,6 +2034,6 @@
     <script src="js/modules/typescale.js?v=a18b7253"></script>
     <script src="js/modules/borderradius.js?v=14d61ed0"></script>
     <script src="js/modules/scrollbar.js?v=ad2b657b"></script>
-    <script src="js/main.js?v=6ab3a2a0"></script>
+    <script src="js/main.js?v=d8215ee0"></script>
   </body>
 </html>
