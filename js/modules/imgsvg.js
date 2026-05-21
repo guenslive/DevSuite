@@ -2,7 +2,8 @@ App.imgsvg = {
     state: {
         imageData: null,
         sourceName: "image",
-        svg: ""
+        svg: "",
+        originalSize: 0
     },
 
     MAX_DIMENSION: 1000,
@@ -38,12 +39,19 @@ App.imgsvg = {
         if (file) App.imgsvg.handleFile(file);
     },
 
+    pickFile() {
+        const input = document.getElementById("imgsvgFile");
+        if (input) input.click();
+    },
+
     handleFile(file) {
         if (!file.type.startsWith("image/")) {
             App.imgsvg.setStatus("El archivo no es una imagen.", true);
             return;
         }
         App.imgsvg.state.sourceName = file.name.replace(/\.[^.]+$/, "") || "image";
+        App.imgsvg.state.originalSize = file.size;
+        App.imgsvg.showFileInfo(file.name);
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -77,9 +85,33 @@ App.imgsvg = {
         orig.innerHTML = "";
         orig.appendChild(canvas);
 
-        document.getElementById("imgsvgConvertBtn").disabled = false;
-        App.imgsvg.setStatus(`Imagen lista (${width}×${height}px). Pulsa Convertir.`);
+        const controls = document.getElementById("imgsvgControls");
+        if (controls) controls.disabled = false;
+
+        App.imgsvg.setStatus(`Imagen lista (${width}×${height}px). Vectorizando…`);
         App.imgsvg.convert();
+    },
+
+    showFileInfo(name) {
+        const info = document.getElementById("imgsvgFileInfo");
+        const label = document.getElementById("imgsvgFileName");
+        const drop = document.getElementById("imgsvgDrop");
+        if (label) label.textContent = name;
+        if (info) info.hidden = false;
+        if (drop) drop.classList.add("has-file");
+    },
+
+    toggleSpinner(show) {
+        const spinner = document.getElementById("imgsvgSpinner");
+        if (spinner) spinner.hidden = !show;
+    },
+
+    formatBytes(bytes) {
+        if (!bytes) return "0 KB";
+        const kb = bytes / 1024;
+        return kb >= 1024
+            ? `${(kb / 1024).toFixed(1)} MB`
+            : `${kb.toFixed(1)} KB`;
     },
 
     getOptions() {
@@ -110,6 +142,7 @@ App.imgsvg = {
         }
 
         App.imgsvg.setStatus("Procesando…");
+        App.imgsvg.toggleSpinner(true);
         setTimeout(() => {
             try {
                 const svg = ImageTracer.imagedataToSVG(
@@ -121,6 +154,8 @@ App.imgsvg = {
             } catch (err) {
                 console.error("ImageTracer failed", err);
                 App.imgsvg.setStatus("Error al vectorizar la imagen.", true);
+            } finally {
+                App.imgsvg.toggleSpinner(false);
             }
         }, 20);
     },
@@ -137,8 +172,19 @@ App.imgsvg = {
         }
         App.imgsvg.zoomReset();
 
-        const sizeKb = (new Blob([svg]).size / 1024).toFixed(1);
-        App.imgsvg.setStatus(`SVG generado (${sizeKb} KB).`);
+        const code = document.getElementById("imgsvgCode");
+        if (code) code.textContent = svg;
+
+        const svgBytes = new Blob([svg]).size;
+        const original = App.imgsvg.state.originalSize;
+        let status = `SVG generado · ${App.imgsvg.formatBytes(svgBytes)}`;
+        if (original) {
+            const delta = svgBytes <= original
+                ? `${Math.round((1 - svgBytes / original) * 100)}% más ligero`
+                : `${Math.round((svgBytes / original - 1) * 100)}% más pesado`;
+            status += ` (original ${App.imgsvg.formatBytes(original)} · ${delta})`;
+        }
+        App.imgsvg.setStatus(status);
 
         document.getElementById("imgsvgDownloadBtn").disabled = false;
         document.getElementById("imgsvgCopyBtn").disabled = false;
@@ -228,6 +274,6 @@ App.imgsvg = {
         const el = document.getElementById("imgsvgStatus");
         if (!el) return;
         el.textContent = msg;
-        el.style.color = isError ? "var(--danger, #FF3B30)" : "var(--text-secondary, #8e8e93)";
+        el.classList.toggle("is-error", !!isError);
     }
 };

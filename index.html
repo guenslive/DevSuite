@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
     <link rel="stylesheet" href="css/layout.css?v=1f72fe19">
-    <link rel="stylesheet" href="css/tools.css?v=5182749f">
+    <link rel="stylesheet" href="css/tools.css?v=ecf2eac0">
     <link rel="stylesheet" href="css/blob.css?v=83abcc8e">
     <link rel="stylesheet" href="css/gradient.css?v=048e66f3">
     <link rel="stylesheet" href="css/contrast.css?v=8d0ada5d">
@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/grid.css?v=bdbd2e42">
     <link rel="stylesheet" href="css/palette.css?v=c1f424b5">
     <link rel="stylesheet" href="css/metatags.css?v=3628ac30">
+    <link rel="stylesheet" href="css/imgsvg.css?v=45f4a3dc">
   </head>
   <body>
     <div id="loader-overlay">
@@ -2003,71 +2004,81 @@
         <h2>Image to SVG</h2>
 
         <label for="imgsvgFile" id="imgsvgDrop" class="imgsvg-drop">
-            <input type="file" id="imgsvgFile" accept="image/*" hidden onchange="App.imgsvg.onFileInput(this)">
+            <input type="file" id="imgsvgFile" accept="image/*" class="sr-only" onchange="App.imgsvg.onFileInput(this)">
+            <span class="imgsvg-drop-icon" aria-hidden="true">🖼️</span>
             <span class="imgsvg-drop-title">Arrastra una imagen aquí</span>
             <span class="imgsvg-drop-hint">o haz clic para elegir un archivo (PNG, JPG, WEBP…)</span>
         </label>
 
-        <p class="imgsvg-note">Funciona mejor con logos, iconos y dibujos de pocos colores. Las fotos generan SVG pesados.</p>
-
-        <div class="grid-triple">
-            <div class="input-group">
-                <div class="label-row"><label>Colores</label><span id="valImgsvgColors">16</span></div>
-                <input type="range" id="imgsvgColors" min="2" max="64" value="16"
-                       oninput="document.getElementById('valImgsvgColors').textContent = this.value"
-                       onchange="App.imgsvg.convert()">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><label>Simplificación</label><span id="valImgsvgDetail">8</span></div>
-                <input type="range" id="imgsvgDetail" min="0" max="20" value="8"
-                       oninput="document.getElementById('valImgsvgDetail').textContent = this.value"
-                       onchange="App.imgsvg.convert()">
-            </div>
-            <div class="input-group">
-                <div class="label-row"><label>Suavizado</label><span id="valImgsvgBlur">0</span></div>
-                <input type="range" id="imgsvgBlur" min="0" max="5" value="0"
-                       oninput="document.getElementById('valImgsvgBlur').textContent = this.value"
-                       onchange="App.imgsvg.convert()">
-            </div>
+        <div class="imgsvg-fileinfo" id="imgsvgFileInfo" hidden>
+            <span class="imgsvg-fileinfo-name" id="imgsvgFileName"></span>
+            <button type="button" class="imgsvg-change-btn" onclick="App.imgsvg.pickFile()">Cambiar imagen</button>
         </div>
 
-        <label class="ts-check-label" style="margin: 0 0 20px 0;">
-            <input type="checkbox" id="imgsvgGray" onchange="App.imgsvg.convert()">
-            <span>Escala de grises</span>
-        </label>
+        <p class="imgsvg-note">Funciona mejor con logos, iconos y dibujos de pocos colores. Las fotos generan SVG pesados.</p>
 
-        <div class="grid-pair">
-            <div class="input-group">
-                <label>Original</label>
-                <div class="preview-container imgsvg-preview" id="imgsvgOriginal"></div>
+        <fieldset class="imgsvg-controls" id="imgsvgControls" disabled>
+            <legend class="sr-only">Opciones de vectorización</legend>
+            <div class="grid-triple">
+                <div class="input-group">
+                    <div class="label-row"><label>Colores</label><span id="valImgsvgColors">16</span></div>
+                    <input type="range" id="imgsvgColors" min="2" max="64" value="16"
+                           oninput="document.getElementById('valImgsvgColors').textContent = this.value"
+                           onchange="App.imgsvg.convert()">
+                </div>
+                <div class="input-group">
+                    <div class="label-row"><label>Simplificación</label><span id="valImgsvgDetail">8</span></div>
+                    <input type="range" id="imgsvgDetail" min="0" max="20" value="8"
+                           oninput="document.getElementById('valImgsvgDetail').textContent = this.value"
+                           onchange="App.imgsvg.convert()">
+                </div>
+                <div class="input-group">
+                    <div class="label-row"><label>Suavizado</label><span id="valImgsvgBlur">0</span></div>
+                    <input type="range" id="imgsvgBlur" min="0" max="5" value="0"
+                           oninput="document.getElementById('valImgsvgBlur').textContent = this.value"
+                           onchange="App.imgsvg.convert()">
+                </div>
             </div>
-            <div class="input-group">
-                <label>SVG vectorizado</label>
-                <div class="imgsvg-result-wrap">
-                    <div class="preview-container imgsvg-preview" id="imgsvgResult"></div>
-                    <div class="imgsvg-zoom-bar">
-                        <button type="button" title="Alejar" onclick="App.imgsvg.zoomBy(0.8)">−</button>
-                        <span id="imgsvgZoomLabel">100%</span>
-                        <button type="button" title="Acercar" onclick="App.imgsvg.zoomBy(1.25)">+</button>
-                        <button type="button" title="Restablecer" onclick="App.imgsvg.zoomReset()">⟲</button>
+
+            <label class="ts-check-label imgsvg-gray">
+                <input type="checkbox" id="imgsvgGray" onchange="App.imgsvg.convert()">
+                <span>Escala de grises</span>
+            </label>
+        </fieldset>
+
+        <div class="imgsvg-compare-wrap">
+            <div class="imgsvg-compare">
+                <div class="input-group">
+                    <label>Original</label>
+                    <div class="preview-container imgsvg-preview" id="imgsvgOriginal"></div>
+                </div>
+                <div class="input-group">
+                    <label>SVG vectorizado</label>
+                    <div class="imgsvg-result-wrap">
+                        <div class="preview-container imgsvg-preview" id="imgsvgResult"></div>
+                        <div class="imgsvg-zoom-bar" role="group" aria-label="Zoom del resultado">
+                            <button type="button" title="Alejar" aria-label="Alejar" onclick="App.imgsvg.zoomBy(0.8)">−</button>
+                            <span id="imgsvgZoomLabel">100%</span>
+                            <button type="button" title="Acercar" aria-label="Acercar" onclick="App.imgsvg.zoomBy(1.25)">+</button>
+                            <button type="button" title="Restablecer" aria-label="Restablecer zoom" onclick="App.imgsvg.zoomReset()">⟲</button>
+                        </div>
+                        <div class="imgsvg-spinner" id="imgsvgSpinner" aria-hidden="true" hidden></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-            <button class="action-btn" id="imgsvgConvertBtn" onclick="App.imgsvg.convert()" disabled>Convertir</button>
-            <span id="imgsvgStatus" class="imgsvg-status">Carga una imagen para empezar.</span>
-        </div>
+        <p id="imgsvgStatus" class="imgsvg-status" role="status" aria-live="polite">Carga una imagen para empezar.</p>
 
         <div class="output-box">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">SVG OUTPUT</span>
-                <div style="display: flex; gap: 8px;">
+            <div class="imgsvg-output-head">
+                <span class="imgsvg-output-label">SVG OUTPUT</span>
+                <div class="imgsvg-output-actions">
                     <button class="copy-btn" id="imgsvgCopyBtn" onclick="App.imgsvg.copy()" disabled>Copiar</button>
                     <button class="copy-btn" id="imgsvgDownloadBtn" onclick="App.imgsvg.download()" disabled>Descargar .svg</button>
                 </div>
             </div>
+            <pre class="code-result imgsvg-code" id="imgsvgCode">El código SVG aparecerá aquí.</pre>
         </div>
       </div>
 
@@ -2108,7 +2119,7 @@
     <script src="js/modules/borderradius.js?v=14d61ed0"></script>
     <script src="js/modules/scrollbar.js?v=ad2b657b"></script>
     <script src="js/lib/imagetracer_v1.2.6.js?v=64c176d6"></script>
-    <script src="js/modules/imgsvg.js?v=c0920b82"></script>
+    <script src="js/modules/imgsvg.js?v=e6c22822"></script>
     <script src="js/main.js?v=bd2316a8"></script>
   </body>
 </html>
