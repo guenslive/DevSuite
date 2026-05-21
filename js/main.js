@@ -68,6 +68,7 @@ App._initAllTools = function() {
     if (App.typescale && App.typescale.update) App.typescale.update();
     if (App.borderradius && App.borderradius.update) App.borderradius.update();
     if (App.scrollbar && App.scrollbar.update) App.scrollbar.update();
+    if (App.imgsvg && App.imgsvg.init) App.imgsvg.init();
 };
 
 App._initScrollButtons = function() {

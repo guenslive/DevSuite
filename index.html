@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
     <link rel="stylesheet" href="css/layout.css?v=1f72fe19">
-    <link rel="stylesheet" href="css/tools.css?v=ecf2eac0">
+    <link rel="stylesheet" href="css/tools.css?v=5182749f">
     <link rel="stylesheet" href="css/blob.css?v=83abcc8e">
     <link rel="stylesheet" href="css/gradient.css?v=048e66f3">
     <link rel="stylesheet" href="css/contrast.css?v=8d0ada5d">
@@ -93,6 +93,7 @@
             <button class="tab-btn" id="tab-typescale" role="tab" aria-selected="false" aria-controls="section-typescale" tabindex="-1" onclick="switchTab('typescale', event)">Type Scale</button>
             <button class="tab-btn" id="tab-borderradius" role="tab" aria-selected="false" aria-controls="section-borderradius" tabindex="-1" onclick="switchTab('borderradius', event)">Border Radius</button>
             <button class="tab-btn" id="tab-scrollbar" role="tab" aria-selected="false" aria-controls="section-scrollbar" tabindex="-1" onclick="switchTab('scrollbar', event)">Scrollbar</button>
+            <button class="tab-btn" id="tab-imgsvg" role="tab" aria-selected="false" aria-controls="section-imgsvg" tabindex="-1" onclick="switchTab('imgsvg', event)">Image to SVG</button>
           </div>
           <button id="scrollRightBtn" class="scroll-btn" onclick="App.core.scrollTabs(1)" aria-label="Scroll Right">
             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -1998,6 +1999,78 @@
         </div>
       </div>
 
+      <div id="section-imgsvg" class="tool-section" role="tabpanel" aria-labelledby="tab-imgsvg" tabindex="0">
+        <h2>Image to SVG</h2>
+
+        <label for="imgsvgFile" id="imgsvgDrop" class="imgsvg-drop">
+            <input type="file" id="imgsvgFile" accept="image/*" hidden onchange="App.imgsvg.onFileInput(this)">
+            <span class="imgsvg-drop-title">Arrastra una imagen aquí</span>
+            <span class="imgsvg-drop-hint">o haz clic para elegir un archivo (PNG, JPG, WEBP…)</span>
+        </label>
+
+        <p class="imgsvg-note">Funciona mejor con logos, iconos y dibujos de pocos colores. Las fotos generan SVG pesados.</p>
+
+        <div class="grid-triple">
+            <div class="input-group">
+                <div class="label-row"><label>Colores</label><span id="valImgsvgColors">16</span></div>
+                <input type="range" id="imgsvgColors" min="2" max="64" value="16"
+                       oninput="document.getElementById('valImgsvgColors').textContent = this.value"
+                       onchange="App.imgsvg.convert()">
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Simplificación</label><span id="valImgsvgDetail">8</span></div>
+                <input type="range" id="imgsvgDetail" min="0" max="20" value="8"
+                       oninput="document.getElementById('valImgsvgDetail').textContent = this.value"
+                       onchange="App.imgsvg.convert()">
+            </div>
+            <div class="input-group">
+                <div class="label-row"><label>Suavizado</label><span id="valImgsvgBlur">0</span></div>
+                <input type="range" id="imgsvgBlur" min="0" max="5" value="0"
+                       oninput="document.getElementById('valImgsvgBlur').textContent = this.value"
+                       onchange="App.imgsvg.convert()">
+            </div>
+        </div>
+
+        <label class="ts-check-label" style="margin: 0 0 20px 0;">
+            <input type="checkbox" id="imgsvgGray" onchange="App.imgsvg.convert()">
+            <span>Escala de grises</span>
+        </label>
+
+        <div class="grid-pair">
+            <div class="input-group">
+                <label>Original</label>
+                <div class="preview-container imgsvg-preview" id="imgsvgOriginal"></div>
+            </div>
+            <div class="input-group">
+                <label>SVG vectorizado</label>
+                <div class="imgsvg-result-wrap">
+                    <div class="preview-container imgsvg-preview" id="imgsvgResult"></div>
+                    <div class="imgsvg-zoom-bar">
+                        <button type="button" title="Alejar" onclick="App.imgsvg.zoomBy(0.8)">−</button>
+                        <span id="imgsvgZoomLabel">100%</span>
+                        <button type="button" title="Acercar" onclick="App.imgsvg.zoomBy(1.25)">+</button>
+                        <button type="button" title="Restablecer" onclick="App.imgsvg.zoomReset()">⟲</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+            <button class="action-btn" id="imgsvgConvertBtn" onclick="App.imgsvg.convert()" disabled>Convertir</button>
+            <span id="imgsvgStatus" class="imgsvg-status">Carga una imagen para empezar.</span>
+        </div>
+
+        <div class="output-box">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">SVG OUTPUT</span>
+                <div style="display: flex; gap: 8px;">
+                    <button class="copy-btn" id="imgsvgCopyBtn" onclick="App.imgsvg.copy()" disabled>Copiar</button>
+                    <button class="copy-btn" id="imgsvgDownloadBtn" onclick="App.imgsvg.download()" disabled>Descargar .svg</button>
+                </div>
+            </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Custom Modal -->
@@ -2014,7 +2087,7 @@
 
     <script src="js/app.js?v=52f407dc"></script>
     <script src="js/utils/utils.js?v=05d3c2ad"></script>
-    <script src="js/core/core.js?v=f63151b3"></script>
+    <script src="js/core/core.js?v=c7cbe914"></script>
     <script src="js/core/urlstate.js?v=84ed76af"></script>
     <script src="js/modules/clamp.js?v=ed058600"></script>
     <script src="js/modules/ratio.js?v=1976fcff"></script>
@@ -2034,6 +2107,8 @@
     <script src="js/modules/typescale.js?v=a18b7253"></script>
     <script src="js/modules/borderradius.js?v=14d61ed0"></script>
     <script src="js/modules/scrollbar.js?v=ad2b657b"></script>
-    <script src="js/main.js?v=d8215ee0"></script>
+    <script src="js/lib/imagetracer_v1.2.6.js?v=64c176d6"></script>
+    <script src="js/modules/imgsvg.js?v=c0920b82"></script>
+    <script src="js/main.js?v=bd2316a8"></script>
   </body>
 </html>

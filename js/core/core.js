@@ -45,7 +45,8 @@ App.core = {
         { id: 'keyframes', name: 'Animation', desc: 'CSS @keyframes animation generator' },
         { id: 'typescale', name: 'Type Scale', desc: 'Modular typography scale generator' },
         { id: 'borderradius', name: 'Border Radius', desc: 'Border radius with elliptical corners' },
-        { id: 'scrollbar', name: 'Scrollbar', desc: 'Custom webkit scrollbar styler' }
+        { id: 'scrollbar', name: 'Scrollbar', desc: 'Custom webkit scrollbar styler' },
+        { id: 'imgsvg', name: 'Image to SVG', desc: 'Vectorize raster images (PNG/JPG) to SVG' }
     ],
     searchState: {
         selectedIndex: -1,
@@ -384,6 +385,7 @@ App.core = {
         if (t === "typescale") App.typescale.update();
         if (t === "borderradius") App.borderradius.update();
         if (t === "scrollbar") App.scrollbar.update();
+        if (t === "imgsvg") App.imgsvg.init();
 
         if (App.urlState) App.urlState.onTabChange(t);
     },
