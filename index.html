@@ -313,6 +313,14 @@
 
       <div id="section-placeholder" class="tool-section" role="tabpanel" aria-labelledby="tab-placeholder" tabindex="0">
         <h2>Placeholder Gen</h2>
+        <div class="multiple-preset-row" role="group" aria-label="Presets de tamaño">
+          <button class="multiple-preset-btn" data-ph-preset="og" onclick="App.placeholder.applyPreset('og')">OG 1200×630</button>
+          <button class="multiple-preset-btn" data-ph-preset="square" onclick="App.placeholder.applyPreset('square')">Cuadrado 1080</button>
+          <button class="multiple-preset-btn" data-ph-preset="hd" onclick="App.placeholder.applyPreset('hd')">16:9 1920×1080</button>
+          <button class="multiple-preset-btn" data-ph-preset="story" onclick="App.placeholder.applyPreset('story')">Story 1080×1920</button>
+          <button class="multiple-preset-btn" data-ph-preset="banner" onclick="App.placeholder.applyPreset('banner')">Banner 728×90</button>
+          <button class="multiple-preset-btn" data-ph-preset="avatar" onclick="App.placeholder.applyPreset('avatar')">Avatar 256</button>
+        </div>
         <div class="preview-container">
           <canvas id="placeholderCanvas"></canvas>
         </div>
@@ -348,7 +356,7 @@
           <div class="input-group">
             <div class="label-row" style="justify-content: space-between; margin-bottom: 5px;">
                 <label style="margin:0">Fondo</label>
-                <button class="btn-small" style="padding: 4px 8px; font-size: 0.7rem;" onclick="App.placeholder.randomColor()">Random</button>
+                <button class="btn-small" style="padding: 4px 8px; font-size: 0.7rem;" onclick="App.placeholder.randomPair()" title="Genera fondo + texto con contraste AA garantizado">Par aleatorio</button>
             </div>
             <div class="pro-color-picker">
               <div class="color-preview-box" id="phBgBox" style="background: #007aff">
@@ -372,16 +380,27 @@
             </div>
           </div>
         </div>
+        <div id="phQualityRow" class="input-group" style="margin-bottom: 12px;">
+          <div class="label-row" style="justify-content: space-between;">
+            <label style="margin:0">Calidad (JPG/WEBP)</label>
+            <span id="phQualityVal" style="font-size: 0.8rem; font-weight: 700; color: var(--apple-blue);">92%</span>
+          </div>
+          <input type="range" id="phQuality" min="1" max="100" value="92" style="width: 100%;"
+                 oninput="document.getElementById('phQualityVal').innerText = this.value + '%'; App.placeholder.updateFileSize()" />
+        </div>
         <div class="output-box" style="display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 15px;">
             <span class="code-result" style="color: #8e8e93; word-break: normal; white-space: nowrap;">Formato</span>
-            <select id="phFormat" style="padding: 4px 8px; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem; outline: none;">
+            <select id="phFormat" onchange="App.placeholder.onFormatChange()" style="padding: 4px 8px; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem; outline: none;">
               <option value="png">PNG</option>
               <option value="jpg" selected>JPG</option>
               <option value="webp">WEBP</option>
             </select>
           </div>
-          <button class="action-btn" onclick="downloadPlaceholder()">Guardar</button>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 0.8rem; color: #8e8e93; white-space: nowrap;">~<span id="phFileSize">—</span></span>
+            <button class="action-btn" onclick="downloadPlaceholder()">Guardar</button>
+          </div>
         </div>
       </div>
 
@@ -2126,7 +2145,7 @@
     <script src="js/core/urlstate.js?v=84ed76af"></script>
     <script src="js/modules/clamp.js?v=d4734c5f"></script>
     <script src="js/modules/ratio.js?v=1976fcff"></script>
-    <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
+    <script src="js/modules/placeholder.js?v=33335fd3"></script>
     <script src="js/modules/shadow.js?v=8dd2b48e"></script>
     <script src="js/modules/contrast.js?v=3f398b2f"></script>
     <script src="js/modules/gradient.js?v=f4769657"></script>
