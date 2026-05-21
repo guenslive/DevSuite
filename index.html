@@ -16,9 +16,9 @@
       })();
     </script>
 
-    <link rel="stylesheet" href="css/variables.css?v=8bdc48b7">
+    <link rel="stylesheet" href="css/variables.css?v=7d04d7b2">
     <link rel="stylesheet" href="css/layout.css?v=1f72fe19">
-    <link rel="stylesheet" href="css/tools.css?v=ecf2eac0">
+    <link rel="stylesheet" href="css/tools.css?v=e4711ed0">
     <link rel="stylesheet" href="css/blob.css?v=83abcc8e">
     <link rel="stylesheet" href="css/gradient.css?v=048e66f3">
     <link rel="stylesheet" href="css/contrast.css?v=8d0ada5d">
@@ -170,7 +170,14 @@
 
       <div id="section-clamp" class="tool-section active" role="tabpanel" aria-labelledby="tab-clamp" tabindex="0">
         <h2>Clamp Generator</h2>
-        
+
+        <div class="multiple-preset-row" role="group" aria-label="Presets de tamaño de fuente">
+          <button class="multiple-preset-btn" data-clamp-preset="body" onclick="App.clamp.applyPreset('body')">Body</button>
+          <button class="multiple-preset-btn" data-clamp-preset="h3" onclick="App.clamp.applyPreset('h3')">H3</button>
+          <button class="multiple-preset-btn" data-clamp-preset="h2" onclick="App.clamp.applyPreset('h2')">H2</button>
+          <button class="multiple-preset-btn" data-clamp-preset="h1" onclick="App.clamp.applyPreset('h1')">H1</button>
+        </div>
+
         <div class="preview-container" style="flex-direction: column; align-items: stretch; gap: 10px; padding: 20px; background: var(--bg-secondary); margin-bottom: 20px;">
             <div id="clampPreviewBox" style="border: 2px dashed var(--border-color); padding: 20px; transition: all 0.2s; margin: 0 auto; background: var(--bg-primary); border-radius: 8px; overflow: hidden; width: 100%; display: flex; justify-content: center; align-items: center; min-height: 100px;">
                 <p id="clampPreviewText" style="margin: 0; white-space: nowrap; text-align: center;">Texto de Prueba</p>
@@ -214,10 +221,27 @@
             <input type="number" id="maxFont" value="2" step="any" oninput="calcClamp()" />
           </div>
         </div>
+        <div class="grid-pair">
+          <div class="input-group">
+            <label>Unidad de escalado</label>
+            <select id="clampScaleUnit" onchange="calcClamp()">
+              <option value="vw" selected>vw — viewport</option>
+              <option value="cqi">cqi — container query</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Salida</label>
+            <select id="clampOutputMode" onchange="calcClamp()">
+              <option value="declaration" selected>Declaración (font-size: …;)</option>
+              <option value="value">Solo valor clamp()</option>
+            </select>
+          </div>
+        </div>
         <div style="text-align: right; margin-bottom: 10px">
           <label style="margin-right: 5px">Base PX:</label>
           <input type="number" id="pixelsPerRem" value="16" style="width: 60px; padding: 6px; text-align: center; border-radius: 8px;" oninput="calcClamp()" />
         </div>
+        <div id="clampWarning" class="clamp-warning" role="alert" hidden></div>
         <div class="output-box">
           <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
             <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS RESULT</span>
@@ -2100,7 +2124,7 @@
     <script src="js/utils/utils.js?v=05d3c2ad"></script>
     <script src="js/core/core.js?v=c7cbe914"></script>
     <script src="js/core/urlstate.js?v=84ed76af"></script>
-    <script src="js/modules/clamp.js?v=ed058600"></script>
+    <script src="js/modules/clamp.js?v=d4734c5f"></script>
     <script src="js/modules/ratio.js?v=1976fcff"></script>
     <script src="js/modules/placeholder.js?v=c8aec3a9"></script>
     <script src="js/modules/shadow.js?v=8dd2b48e"></script>

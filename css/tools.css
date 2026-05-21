@@ -899,3 +899,19 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+/* ============ CLAMP — WCAG RATIO WARNING ============ */
+.clamp-warning {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--warn-color);
+  background: var(--warn-bg);
+  color: var(--warn-color);
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.clamp-warning[hidden] {
+  display: none;
+}

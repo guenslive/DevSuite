@@ -27,6 +27,8 @@
   --scroll-shadow: rgba(0, 0, 0, 0.15);
   --pass-color: #34c759;
   --fail-color: #ff3b30;
+  --warn-color: #ff9500;
+  --warn-bg: rgba(255, 149, 0, 0.12);
   --checker-pattern: repeating-conic-gradient(
       rgba(0, 0, 0, 0.04) 0% 25%,
       transparent 0% 50%
@@ -52,6 +54,8 @@
   --preview-border: #3a3a3c;
   --track-color: #636366;
   --thumb-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --warn-color: #ff9f0a;
+  --warn-bg: rgba(255, 159, 10, 0.16);
   --checker-pattern: repeating-conic-gradient(
       rgba(255, 255, 255, 0.06) 0% 25%,
       transparent 0% 50%
