@@ -258,18 +258,32 @@
             <div class="ratio-box" id="ratioBox">16:9</div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 20px; font-weight: 600; font-size: 1.2rem;" id="ratioResultText">
+        <div style="text-align: center; margin-bottom: 4px; font-weight: 600; font-size: 1.2rem;" id="ratioResultText" aria-live="polite">
             16 : 9
         </div>
-        
+        <div style="text-align: center; margin-bottom: 18px; font-size: 0.85rem; color: var(--text-secondary);" id="ratioMeta" aria-live="polite">
+            ≈ 1.778 · Widescreen
+        </div>
+
+        <div class="multiple-preset-row">
+            <button class="multiple-preset-btn" data-ratio-preset="16:9" onclick="App.ratio.applyPreset(16, 9)">16:9</button>
+            <button class="multiple-preset-btn" data-ratio-preset="4:3" onclick="App.ratio.applyPreset(4, 3)">4:3</button>
+            <button class="multiple-preset-btn" data-ratio-preset="3:2" onclick="App.ratio.applyPreset(3, 2)">3:2</button>
+            <button class="multiple-preset-btn" data-ratio-preset="16:10" onclick="App.ratio.applyPreset(16, 10)">16:10</button>
+            <button class="multiple-preset-btn" data-ratio-preset="21:9" onclick="App.ratio.applyPreset(21, 9)">21:9</button>
+            <button class="multiple-preset-btn" data-ratio-preset="2:1" onclick="App.ratio.applyPreset(2, 1)">2:1</button>
+            <button class="multiple-preset-btn" data-ratio-preset="1:1" onclick="App.ratio.applyPreset(1, 1)">1:1</button>
+            <button class="multiple-preset-btn" data-ratio-preset="9:16" onclick="App.ratio.applyPreset(9, 16)">9:16</button>
+        </div>
+
         <div class="grid-pair">
             <div class="input-group">
                 <label>Ancho (px)</label>
-                <input type="number" id="imgWidth" value="1920" oninput="calcRatio()" />
+                <input type="number" id="imgWidth" value="1920" min="1" step="1" oninput="calcRatio()" />
             </div>
             <div class="input-group">
                 <label>Alto (px)</label>
-                <input type="number" id="imgHeight" value="1080" oninput="calcRatio()" />
+                <input type="number" id="imgHeight" value="1080" min="1" step="1" oninput="calcRatio()" />
             </div>
         </div>
         
@@ -278,13 +292,17 @@
         <div class="grid-pair" style="align-items: center; gap: 10px;">
             <div class="input-group">
                 <label>Ratio Ancho</label>
-                <input type="number" id="ratioInW" value="16" oninput="App.ratio.calcResize('ratio')" />
+                <input type="number" id="ratioInW" value="16" min="1" step="1" oninput="App.ratio.calcResize('ratio')" />
             </div>
             
             <div class="input-group">
                 <label>Ratio Alto</label>
-                <input type="number" id="ratioInH" value="9" oninput="App.ratio.calcResize('ratio')" />
+                <input type="number" id="ratioInH" value="9" min="1" step="1" oninput="App.ratio.calcResize('ratio')" />
             </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <button class="multiple-preset-btn" type="button" onclick="App.ratio.swap()" title="Intercambiar ancho y alto" aria-label="Intercambiar ancho y alto">⇄ Invertir ratio</button>
         </div>
 
         <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin: 20px 0 10px;">
@@ -294,18 +312,25 @@
         <div class="grid-pair">
             <div class="input-group">
                 <label>Nuevo Ancho</label>
-                <input type="number" id="resizeW" placeholder="..." oninput="App.ratio.calcResize('width')" />
+                <input type="number" id="resizeW" placeholder="..." min="1" step="1" oninput="App.ratio.calcResize('width')" />
             </div>
             <div class="input-group">
                 <label>Nueva Altura</label>
-                <input type="number" id="resizeH" placeholder="..." oninput="App.ratio.calcResize('height')" />
+                <input type="number" id="resizeH" placeholder="..." min="1" step="1" oninput="App.ratio.calcResize('height')" />
             </div>
+        </div>
+
+        <div style="text-align: center; margin: 18px 0 4px;">
+            <button class="multiple-preset-btn" type="button" style="padding: 10px 18px; font-size: 0.8rem;" onclick="App.ratio.toPlaceholder()" title="Usar estas medidas en el generador de placeholders">🖼 Crear placeholder con estas medidas</button>
         </div>
 
         <div class="output-box" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                 <span style="font-size: 0.7rem; font-weight: 700; color: #8e8e93">CSS</span>
-                <button class="copy-btn" onclick="copyText('ratioCssResult', this)">Copiar</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="copy-btn" onclick="copyText('ratioResultText', this)">Copiar ratio</button>
+                    <button class="copy-btn" onclick="copyText('ratioCssResult', this)">Copiar CSS</button>
+                </div>
             </div>
             <div class="code-result" id="ratioCssResult">aspect-ratio: 16 / 9;</div>
         </div>
@@ -2144,7 +2169,7 @@
     <script src="js/core/core.js?v=c7cbe914"></script>
     <script src="js/core/urlstate.js?v=84ed76af"></script>
     <script src="js/modules/clamp.js?v=d4734c5f"></script>
-    <script src="js/modules/ratio.js?v=1976fcff"></script>
+    <script src="js/modules/ratio.js?v=28804596"></script>
     <script src="js/modules/placeholder.js?v=33335fd3"></script>
     <script src="js/modules/shadow.js?v=8dd2b48e"></script>
     <script src="js/modules/contrast.js?v=3f398b2f"></script>
